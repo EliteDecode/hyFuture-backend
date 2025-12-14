@@ -1,0 +1,1618 @@
+[
+  {
+    "id": "55887f64-15d2-4676-9026-caef50838303",
+    "name": "Afghanistan",
+    "code": "AF",
+    "phoneCode": "+93",
+    "logo": "https://flagcdn.com/af.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "04ad4172-be7b-4cda-b37a-456cd23a8b3b",
+    "name": "Albania",
+    "code": "AL",
+    "phoneCode": "+355",
+    "logo": "https://flagcdn.com/al.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "830e3c48-65cd-4954-913d-d3bf9ae1995c",
+    "name": "Algeria",
+    "code": "DZ",
+    "phoneCode": "+213",
+    "logo": "https://flagcdn.com/dz.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "0aacaced-06ff-47ce-9fec-f7b7b283ac8f",
+    "name": "Andorra",
+    "code": "AD",
+    "phoneCode": "+376",
+    "logo": "https://flagcdn.com/ad.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "a38747a3-7d54-4cc9-86c7-37acacf24cc5",
+    "name": "Angola",
+    "code": "AO",
+    "phoneCode": "+244",
+    "logo": "https://flagcdn.com/ao.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "5d38a83c-3e62-46e9-9660-8141b7a980f4",
+    "name": "Antigua and Barbuda",
+    "code": "AG",
+    "phoneCode": "+1",
+    "logo": "https://flagcdn.com/ag.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "48ad62a0-d9d8-4cfd-892f-42afd1bf28a9",
+    "name": "Argentina",
+    "code": "AR",
+    "phoneCode": "+54",
+    "logo": "https://flagcdn.com/ar.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "da75d57c-c367-4cc5-b22f-c529aa282bed",
+    "name": "Armenia",
+    "code": "AM",
+    "phoneCode": "+374",
+    "logo": "https://flagcdn.com/am.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "1539ca8b-937c-4194-a802-584d73842124",
+    "name": "Aruba",
+    "code": "AW",
+    "phoneCode": "+297",
+    "logo": "https://flagcdn.com/aw.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "f591f97d-8b92-4721-9ea2-ec9f40c03eaa",
+    "name": "Australia",
+    "code": "AU",
+    "phoneCode": "+61",
+    "logo": "https://flagcdn.com/au.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "b43328a5-584c-442f-b1d1-21be9b259a8c",
+    "name": "Austria",
+    "code": "AT",
+    "phoneCode": "+43",
+    "logo": "https://flagcdn.com/at.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "7b4cd238-ba9a-4c65-84c9-252ed2534ea0",
+    "name": "Azerbaijan",
+    "code": "AZ",
+    "phoneCode": "+994",
+    "logo": "https://flagcdn.com/az.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "1c37d1e9-2c2f-4aee-8207-73a3b304bb78",
+    "name": "Bahamas",
+    "code": "BS",
+    "phoneCode": "+1",
+    "logo": "https://flagcdn.com/bs.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "b1ba190a-d4f7-4b56-9e64-c675b352095e",
+    "name": "Bahrain",
+    "code": "BH",
+    "phoneCode": "+973",
+    "logo": "https://flagcdn.com/bh.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "920114eb-1c38-4418-97fc-e99af37aaf4e",
+    "name": "Bangladesh",
+    "code": "BD",
+    "phoneCode": "+880",
+    "logo": "https://flagcdn.com/bd.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "63f4ee9f-dd3c-41fb-9d66-c955bfe3f45b",
+    "name": "Barbados",
+    "code": "BB",
+    "phoneCode": "+1",
+    "logo": "https://flagcdn.com/bb.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "672e3c5d-4168-4034-ad41-f952e2242dd8",
+    "name": "Belarus",
+    "code": "BY",
+    "phoneCode": "+375",
+    "logo": "https://flagcdn.com/by.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "2da4181d-e896-4b97-ac6a-8c24cdd46b9e",
+    "name": "Belgium",
+    "code": "BE",
+    "phoneCode": "+32",
+    "logo": "https://flagcdn.com/be.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "44ec97f3-e104-4e88-af73-d27496e74043",
+    "name": "Belize",
+    "code": "BZ",
+    "phoneCode": "+501",
+    "logo": "https://flagcdn.com/bz.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "1ade8b45-1d74-46cd-9d33-31a17d60fddb",
+    "name": "Benin",
+    "code": "BJ",
+    "phoneCode": "+229",
+    "logo": "https://flagcdn.com/bj.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "28dfef92-b055-4a2d-bf5b-34f90b9219fe",
+    "name": "Bhutan",
+    "code": "BT",
+    "phoneCode": "+975",
+    "logo": "https://flagcdn.com/bt.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "bb8e6e47-a458-43a7-be03-20b57f5c58c1",
+    "name": "Bolivia (Plurinational State of)",
+    "code": "BO",
+    "phoneCode": "+591",
+    "logo": "https://flagcdn.com/bo.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "0f54c81c-62a4-49a3-968c-5c1b2e054b51",
+    "name": "Bonaire, Sint Eustatius and Saba",
+    "code": "BQ",
+    "phoneCode": "+599",
+    "logo": "https://flagcdn.com/bq.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "87e199b7-8a47-43d7-9587-cae9cc1749c9",
+    "name": "Bosnia and Herzegovina",
+    "code": "BA",
+    "phoneCode": "+387",
+    "logo": "https://flagcdn.com/ba.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "df736545-ee63-450a-b063-050d86f91df5",
+    "name": "Botswana",
+    "code": "BW",
+    "phoneCode": "+267",
+    "logo": "https://flagcdn.com/bw.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "cdaabc48-d274-4718-947f-d0689ca429ac",
+    "name": "Brazil",
+    "code": "BR",
+    "phoneCode": "+55",
+    "logo": "https://flagcdn.com/br.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "7eea7929-5f9d-4bbe-87d1-2006ab8d13b1",
+    "name": "British Indian Ocean Territory",
+    "code": "IO",
+    "phoneCode": "+246",
+    "logo": "https://flagcdn.com/io.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "e79613ee-45b0-4c6c-b948-6136d78f9811",
+    "name": "Brunei Darussalam",
+    "code": "BN",
+    "phoneCode": "+673",
+    "logo": "https://flagcdn.com/bn.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "1888ed7e-3846-4056-a86a-a6c2f6de3c47",
+    "name": "Bulgaria",
+    "code": "BG",
+    "phoneCode": "+359",
+    "logo": "https://flagcdn.com/bg.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "40f86d5d-bae2-43dd-919e-d5d9533cb155",
+    "name": "Burkina Faso",
+    "code": "BF",
+    "phoneCode": "+226",
+    "logo": "https://flagcdn.com/bf.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "f52c9897-a755-4b1e-8946-ab6be80f0ece",
+    "name": "Burundi",
+    "code": "BI",
+    "phoneCode": "+257",
+    "logo": "https://flagcdn.com/bi.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "c0715b50-b1a1-4c4c-a3d4-7ef8cbb2bd98",
+    "name": "Cabo Verde",
+    "code": "CV",
+    "phoneCode": "+238",
+    "logo": "https://flagcdn.com/cv.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "6c54abc6-3f51-43d9-b3a1-d8dcf97ecfd0",
+    "name": "Cambodia",
+    "code": "KH",
+    "phoneCode": "+855",
+    "logo": "https://flagcdn.com/kh.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "3afcc4c1-3ca8-4e2b-a4a0-074d1ce202a3",
+    "name": "Cameroon",
+    "code": "CM",
+    "phoneCode": "+237",
+    "logo": "https://flagcdn.com/cm.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "3f8e9091-0b88-4f73-b1de-11b5d02a7a5c",
+    "name": "Canada",
+    "code": "CA",
+    "phoneCode": "+1",
+    "logo": "https://flagcdn.com/ca.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "3ceaa7a4-3100-4f10-ba5f-4a19165ec57b",
+    "name": "Central African Republic",
+    "code": "CF",
+    "phoneCode": "+236",
+    "logo": "https://flagcdn.com/cf.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "0576a245-1e27-412e-b8ed-1efcb138f3ac",
+    "name": "Chad",
+    "code": "TD",
+    "phoneCode": "+235",
+    "logo": "https://flagcdn.com/td.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "7c245da5-c92a-465e-88ca-4f3e7a758241",
+    "name": "Chile",
+    "code": "CL",
+    "phoneCode": "+56",
+    "logo": "https://flagcdn.com/cl.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "4b9ba726-f8a7-4836-939b-89a0d529d7f4",
+    "name": "China",
+    "code": "CN",
+    "phoneCode": "+86",
+    "logo": "https://flagcdn.com/cn.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "08aea05c-ce14-4171-909c-40ada401423d",
+    "name": "Colombia",
+    "code": "CO",
+    "phoneCode": "+57",
+    "logo": "https://flagcdn.com/co.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "5d572b5c-f375-4111-a9c6-25fa6871095a",
+    "name": "Comoros",
+    "code": "KM",
+    "phoneCode": "+269",
+    "logo": "https://flagcdn.com/km.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "968cf975-1768-408f-b808-d6644887216d",
+    "name": "Congo",
+    "code": "CG",
+    "phoneCode": "+242",
+    "logo": "https://flagcdn.com/cg.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "0e24b0e2-4df6-488b-a71d-7a4f8f571aae",
+    "name": "Congo (Democratic Republic of the)",
+    "code": "CD",
+    "phoneCode": "+243",
+    "logo": "https://flagcdn.com/cd.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "eea39de5-ea2b-475a-afd3-1bf4c3cb8fba",
+    "name": "Cook Islands",
+    "code": "CK",
+    "phoneCode": "+682",
+    "logo": "https://flagcdn.com/ck.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "376848b6-a8fe-4e17-86d0-d485b3a73d16",
+    "name": "Costa Rica",
+    "code": "CR",
+    "phoneCode": "+506",
+    "logo": "https://flagcdn.com/cr.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "1a2ff7c2-bb48-4f31-9101-e767d6ee2c7c",
+    "name": "Croatia",
+    "code": "HR",
+    "phoneCode": "+385",
+    "logo": "https://flagcdn.com/hr.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "9a0058ca-2e14-4d06-a93c-461844a47d0a",
+    "name": "Cuba",
+    "code": "CU",
+    "phoneCode": "+53",
+    "logo": "https://flagcdn.com/cu.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "f2742e20-72eb-434f-9a68-30376d233f52",
+    "name": "Cyprus",
+    "code": "CY",
+    "phoneCode": "+357",
+    "logo": "https://flagcdn.com/cy.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "2e3b1f33-8bff-4814-a84a-4e8ee1069f6e",
+    "name": "Czech Republic",
+    "code": "CZ",
+    "phoneCode": "+420",
+    "logo": "https://flagcdn.com/cz.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "106b1264-17f4-4b0e-9421-4006ca7e8be4",
+    "name": "Denmark",
+    "code": "DK",
+    "phoneCode": "+45",
+    "logo": "https://flagcdn.com/dk.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "cf6587ec-e334-4ee5-890b-d38554044d9f",
+    "name": "Djibouti",
+    "code": "DJ",
+    "phoneCode": "+253",
+    "logo": "https://flagcdn.com/dj.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "f1aff7d4-9a14-4891-8f20-23860ec27e8a",
+    "name": "Dominica",
+    "code": "DM",
+    "phoneCode": "+1",
+    "logo": "https://flagcdn.com/dm.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "30cbb4cb-825a-4dd7-8483-29e10d4a0043",
+    "name": "Dominican Republic",
+    "code": "DO",
+    "phoneCode": "+1",
+    "logo": "https://flagcdn.com/do.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "fc90027d-f219-4c60-afdd-9fff4c8ec652",
+    "name": "Ecuador",
+    "code": "EC",
+    "phoneCode": "+593",
+    "logo": "https://flagcdn.com/ec.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "e6833830-2e2f-444c-9298-f0619ae0e151",
+    "name": "Egypt",
+    "code": "EG",
+    "phoneCode": "+20",
+    "logo": "https://flagcdn.com/eg.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "c8782db0-d4db-476c-a11d-a0c3a20430cf",
+    "name": "El Salvador",
+    "code": "SV",
+    "phoneCode": "+503",
+    "logo": "https://flagcdn.com/sv.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "3e98ce56-90f6-475a-92a1-eb689ba99fd5",
+    "name": "Equatorial Guinea",
+    "code": "GQ",
+    "phoneCode": "+240",
+    "logo": "https://flagcdn.com/gq.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "43de61cf-383f-45fd-9ccd-107d54c2e94a",
+    "name": "Eritrea",
+    "code": "ER",
+    "phoneCode": "+291",
+    "logo": "https://flagcdn.com/er.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "be5aac69-bf31-4b35-8b06-327b6c4e5b83",
+    "name": "Estonia",
+    "code": "EE",
+    "phoneCode": "+372",
+    "logo": "https://flagcdn.com/ee.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "0c80ab1c-93f9-4461-aaf4-352b9e98fa12",
+    "name": "Ethiopia",
+    "code": "ET",
+    "phoneCode": "+251",
+    "logo": "https://flagcdn.com/et.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "a479928a-ac19-42c2-ac81-888795331101",
+    "name": "Fiji",
+    "code": "FJ",
+    "phoneCode": "+679",
+    "logo": "https://flagcdn.com/fj.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "8e7d8976-a3d9-40e0-8d2e-b4498982d285",
+    "name": "Finland",
+    "code": "FI",
+    "phoneCode": "+358",
+    "logo": "https://flagcdn.com/fi.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "e8607a1e-e760-41ce-a2ff-7f438ff2764e",
+    "name": "France",
+    "code": "FR",
+    "phoneCode": "+33",
+    "logo": "https://flagcdn.com/fr.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "97b2b2b7-987e-4d9f-9184-2c67e472b066",
+    "name": "Gabon",
+    "code": "GA",
+    "phoneCode": "+241",
+    "logo": "https://flagcdn.com/ga.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "9efacf8c-1f97-4c73-b32c-124e518da3db",
+    "name": "Gambia",
+    "code": "GM",
+    "phoneCode": "+220",
+    "logo": "https://flagcdn.com/gm.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "1ff71508-050b-403b-961a-fa7f2fe15a27",
+    "name": "Georgia",
+    "code": "GE",
+    "phoneCode": "+995",
+    "logo": "https://flagcdn.com/ge.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "1dc106e8-e724-42e6-84c4-8b4aac8ee259",
+    "name": "Germany",
+    "code": "DE",
+    "phoneCode": "+49",
+    "logo": "https://flagcdn.com/de.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "a743293d-90a7-48eb-8e25-0eb4321ad177",
+    "name": "Ghana",
+    "code": "GH",
+    "phoneCode": "+233",
+    "logo": "https://flagcdn.com/gh.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "7ad1c2d9-d88b-4c59-9ff0-61f1d19103b9",
+    "name": "Greece",
+    "code": "GR",
+    "phoneCode": "+30",
+    "logo": "https://flagcdn.com/gr.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "cba61d90-1a2a-4863-a134-1ae35a38c4f8",
+    "name": "Grenada",
+    "code": "GD",
+    "phoneCode": "+1",
+    "logo": "https://flagcdn.com/gd.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "df27aa84-8281-4fca-bad8-de5d47af0b5d",
+    "name": "Guatemala",
+    "code": "GT",
+    "phoneCode": "+502",
+    "logo": "https://flagcdn.com/gt.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "e302f02f-79ab-4f54-adca-1e5df6fe7a9a",
+    "name": "Guinea",
+    "code": "GN",
+    "phoneCode": "+224",
+    "logo": "https://flagcdn.com/gn.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "4ab8bd62-0179-4872-8a8a-d66048162b8d",
+    "name": "Guinea-Bissau",
+    "code": "GW",
+    "phoneCode": "+245",
+    "logo": "https://flagcdn.com/gw.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "feadeda2-bb4f-4226-9139-11761de9960d",
+    "name": "Guyana",
+    "code": "GY",
+    "phoneCode": "+592",
+    "logo": "https://flagcdn.com/gy.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "17d537a0-3fef-46f0-88f0-1d260016c986",
+    "name": "Haiti",
+    "code": "HT",
+    "phoneCode": "+509",
+    "logo": "https://flagcdn.com/ht.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "b5f99117-74a8-42ba-a717-8667f48b18d2",
+    "name": "Honduras",
+    "code": "HN",
+    "phoneCode": "+504",
+    "logo": "https://flagcdn.com/hn.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "e3545339-1d40-4fb4-9b65-7f686fad6372",
+    "name": "Hungary",
+    "code": "HU",
+    "phoneCode": "+36",
+    "logo": "https://flagcdn.com/hu.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "02bc1568-ed82-484c-9f47-3a814da536e4",
+    "name": "Iceland",
+    "code": "IS",
+    "phoneCode": "+354",
+    "logo": "https://flagcdn.com/is.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "e050a397-044c-4cbf-aea7-8c16eda21d53",
+    "name": "India",
+    "code": "IN",
+    "phoneCode": "+91",
+    "logo": "https://flagcdn.com/in.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "a08c0795-46bb-48b4-a031-611f9c4784b3",
+    "name": "Indonesia",
+    "code": "ID",
+    "phoneCode": "+62",
+    "logo": "https://flagcdn.com/id.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "3a9435ad-7f45-4443-9981-e5db6319c845",
+    "name": "Iran (Islamic Republic of)",
+    "code": "IR",
+    "phoneCode": "+98",
+    "logo": "https://flagcdn.com/ir.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "d7d0471d-fe99-4e20-9c03-5122b6e7e1ca",
+    "name": "Iraq",
+    "code": "IQ",
+    "phoneCode": "+964",
+    "logo": "https://flagcdn.com/iq.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "56df32db-a5ad-459b-9351-6b7006751e10",
+    "name": "Ireland",
+    "code": "IE",
+    "phoneCode": "+353",
+    "logo": "https://flagcdn.com/ie.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "87fc24d9-d1a0-4886-bba7-17000da73ed7",
+    "name": "Israel",
+    "code": "IL",
+    "phoneCode": "+972",
+    "logo": "https://flagcdn.com/il.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "bea492f2-9fde-4464-bea0-61eda24ab090",
+    "name": "Italy",
+    "code": "IT",
+    "phoneCode": "+39",
+    "logo": "https://flagcdn.com/it.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "1900633b-6291-470b-b10c-e95f3e17fe4e",
+    "name": "Ivory Coast",
+    "code": "CI",
+    "phoneCode": "+225",
+    "logo": "https://flagcdn.com/ci.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "ea055d65-6abd-43a6-9a9c-dd891770ebc7",
+    "name": "Jamaica",
+    "code": "JM",
+    "phoneCode": "+1",
+    "logo": "https://flagcdn.com/jm.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "d890fc61-fd9d-41a0-bb3e-0c4758a38940",
+    "name": "Japan",
+    "code": "JP",
+    "phoneCode": "+81",
+    "logo": "https://flagcdn.com/jp.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "a99bc0e3-4008-44b4-95b2-cf5b5732a591",
+    "name": "Jordan",
+    "code": "JO",
+    "phoneCode": "+962",
+    "logo": "https://flagcdn.com/jo.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "14291ab4-2e8b-4af3-8967-39ec1c1aa54b",
+    "name": "Kazakhstan",
+    "code": "KZ",
+    "phoneCode": "+76",
+    "logo": "https://flagcdn.com/kz.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "45670b0f-5351-4f10-b6ed-41b098812b54",
+    "name": "Kenya",
+    "code": "KE",
+    "phoneCode": "+254",
+    "logo": "https://flagcdn.com/ke.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "060df78e-f3d8-4f37-aa46-15ef4b21fc5c",
+    "name": "Kiribati",
+    "code": "KI",
+    "phoneCode": "+686",
+    "logo": "https://flagcdn.com/ki.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "f6bffeb2-f2a3-4acc-8775-29d23a2cd788",
+    "name": "Korea (Democratic People's Republic of)",
+    "code": "KP",
+    "phoneCode": "+850",
+    "logo": "https://flagcdn.com/kp.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "ed2c82c3-796c-49fa-9f8a-ae64d81284c4",
+    "name": "Korea (Republic of)",
+    "code": "KR",
+    "phoneCode": "+82",
+    "logo": "https://flagcdn.com/kr.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "da5d70db-9328-4cce-ba52-201c67fc9ce1",
+    "name": "Kuwait",
+    "code": "KW",
+    "phoneCode": "+965",
+    "logo": "https://flagcdn.com/kw.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "a1631bde-a1f8-4fc1-bac8-50fbd91973b0",
+    "name": "Kyrgyzstan",
+    "code": "KG",
+    "phoneCode": "+996",
+    "logo": "https://flagcdn.com/kg.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "fd2a6813-ac07-4577-af26-66576e8dd7ed",
+    "name": "Lao People's Democratic Republic",
+    "code": "LA",
+    "phoneCode": "+856",
+    "logo": "https://flagcdn.com/la.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "385963e8-9b5d-42ed-8b08-923d948e54b6",
+    "name": "Latvia",
+    "code": "LV",
+    "phoneCode": "+371",
+    "logo": "https://flagcdn.com/lv.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "184cdb39-5d0f-4f2b-967b-e9b64a5f12b2",
+    "name": "Lebanon",
+    "code": "LB",
+    "phoneCode": "+961",
+    "logo": "https://flagcdn.com/lb.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "84c2e244-2415-46b5-b661-a5cfd1cfce7e",
+    "name": "Lesotho",
+    "code": "LS",
+    "phoneCode": "+266",
+    "logo": "https://flagcdn.com/ls.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "db20f812-1fe0-4fa2-86c9-4adf8c5f2b1b",
+    "name": "Liberia",
+    "code": "LR",
+    "phoneCode": "+231",
+    "logo": "https://flagcdn.com/lr.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "42cd5c49-dac7-47f0-86cf-837c81d28018",
+    "name": "Libya",
+    "code": "LY",
+    "phoneCode": "+218",
+    "logo": "https://flagcdn.com/ly.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "08edd484-007a-45cf-8177-59e7888ade0b",
+    "name": "Liechtenstein",
+    "code": "LI",
+    "phoneCode": "+423",
+    "logo": "https://flagcdn.com/li.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "403dcf50-4690-4213-9caa-924c1dc21c69",
+    "name": "Lithuania",
+    "code": "LT",
+    "phoneCode": "+370",
+    "logo": "https://flagcdn.com/lt.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "23664fe4-3af7-474f-8d75-097cb8eb8e81",
+    "name": "Luxembourg",
+    "code": "LU",
+    "phoneCode": "+352",
+    "logo": "https://flagcdn.com/lu.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "09fcb75e-5505-400c-8d74-ad1a06c4908e",
+    "name": "Madagascar",
+    "code": "MG",
+    "phoneCode": "+261",
+    "logo": "https://flagcdn.com/mg.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "2db6d24a-10ad-4bba-ab3f-329d5f497a46",
+    "name": "Malawi",
+    "code": "MW",
+    "phoneCode": "+265",
+    "logo": "https://flagcdn.com/mw.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "252bfcaa-97b1-498e-bea3-915b2caa7456",
+    "name": "Malaysia",
+    "code": "MY",
+    "phoneCode": "+60",
+    "logo": "https://flagcdn.com/my.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "2fcc955a-8acf-4b7a-8543-d0ae775bcb05",
+    "name": "Maldives",
+    "code": "MV",
+    "phoneCode": "+960",
+    "logo": "https://flagcdn.com/mv.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "c78fcdec-c215-4703-923b-a8845b206c52",
+    "name": "Mali",
+    "code": "ML",
+    "phoneCode": "+223",
+    "logo": "https://flagcdn.com/ml.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "19788fbf-e00b-4baa-821b-8c22eb5ac898",
+    "name": "Malta",
+    "code": "MT",
+    "phoneCode": "+356",
+    "logo": "https://flagcdn.com/mt.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "f2a67c0b-da08-4d64-82ac-ac15f0523bbd",
+    "name": "Marshall Islands",
+    "code": "MH",
+    "phoneCode": "+692",
+    "logo": "https://flagcdn.com/mh.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "a07fd2ea-4cf5-49cd-b323-1203bb5cae4b",
+    "name": "Mauritania",
+    "code": "MR",
+    "phoneCode": "+222",
+    "logo": "https://flagcdn.com/mr.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "e9d82bf0-ffbd-41f3-aaff-ebaf05426809",
+    "name": "Mauritius",
+    "code": "MU",
+    "phoneCode": "+230",
+    "logo": "https://flagcdn.com/mu.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "bc6638c5-2a99-4764-b024-d48306f9ba8f",
+    "name": "Mexico",
+    "code": "MX",
+    "phoneCode": "+52",
+    "logo": "https://flagcdn.com/mx.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "56c3fc59-0cf1-4e52-b49c-4ff8a7fc71c5",
+    "name": "Micronesia (Federated States of)",
+    "code": "FM",
+    "phoneCode": "+691",
+    "logo": "https://flagcdn.com/fm.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "c8ecfaa4-3062-4f9d-80a5-9696f17d0532",
+    "name": "Moldova (Republic of)",
+    "code": "MD",
+    "phoneCode": "+373",
+    "logo": "https://flagcdn.com/md.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "1961b1fb-fa39-4267-816d-41408989d0c7",
+    "name": "Monaco",
+    "code": "MC",
+    "phoneCode": "+377",
+    "logo": "https://flagcdn.com/mc.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "b14cd6a8-b3dd-46f8-960b-6ecbf3e739c2",
+    "name": "Mongolia",
+    "code": "MN",
+    "phoneCode": "+976",
+    "logo": "https://flagcdn.com/mn.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "496de0e3-9212-4498-a496-ecb78f26aef4",
+    "name": "Montenegro",
+    "code": "ME",
+    "phoneCode": "+382",
+    "logo": "https://flagcdn.com/me.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "d65ef044-62a0-4e55-9111-9c8d5d9b551a",
+    "name": "Morocco",
+    "code": "MA",
+    "phoneCode": "+212",
+    "logo": "https://flagcdn.com/ma.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "c57e95c3-8633-44fa-ae22-aa44e8f492cd",
+    "name": "Mozambique",
+    "code": "MZ",
+    "phoneCode": "+258",
+    "logo": "https://flagcdn.com/mz.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "038784dc-5505-463a-8605-7956b3a819ea",
+    "name": "Myanmar",
+    "code": "MM",
+    "phoneCode": "+95",
+    "logo": "https://flagcdn.com/mm.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "5a6209b1-5b04-4155-b5ae-1e7a439ee61b",
+    "name": "Namibia",
+    "code": "NA",
+    "phoneCode": "+264",
+    "logo": "https://flagcdn.com/na.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "f11a3edf-5402-4223-ba51-3054412a5f7a",
+    "name": "Nauru",
+    "code": "NR",
+    "phoneCode": "+674",
+    "logo": "https://flagcdn.com/nr.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "3f09e169-8f9c-452b-8e6d-216537f6934e",
+    "name": "Nepal",
+    "code": "NP",
+    "phoneCode": "+977",
+    "logo": "https://flagcdn.com/np.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "78cd354a-3328-48f3-a233-7caa038b3857",
+    "name": "Netherlands",
+    "code": "NL",
+    "phoneCode": "+31",
+    "logo": "https://flagcdn.com/nl.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "06689f8b-7b57-4e54-ae18-41c55fcc94cc",
+    "name": "New Zealand",
+    "code": "NZ",
+    "phoneCode": "+64",
+    "logo": "https://flagcdn.com/nz.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "1c559904-e865-4ada-8b73-b80082628813",
+    "name": "Nicaragua",
+    "code": "NI",
+    "phoneCode": "+505",
+    "logo": "https://flagcdn.com/ni.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "c3efdf67-e712-4d29-b64f-9a0f3c436d1b",
+    "name": "Niger",
+    "code": "NE",
+    "phoneCode": "+227",
+    "logo": "https://flagcdn.com/ne.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "a8c8db8a-ef82-46d7-89d2-bfb1d81b2b36",
+    "name": "Nigeria",
+    "code": "NG",
+    "phoneCode": "+234",
+    "logo": "https://flagcdn.com/ng.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "f0fd187b-f1f5-4836-a04f-a1a138cfa78d",
+    "name": "Niue",
+    "code": "NU",
+    "phoneCode": "+683",
+    "logo": "https://flagcdn.com/nu.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "017f45b9-2659-425a-ae50-820740b98053",
+    "name": "North Macedonia",
+    "code": "MK",
+    "phoneCode": "+389",
+    "logo": "https://flagcdn.com/mk.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "27bc1f40-b548-4c5d-b60a-aa187a71896a",
+    "name": "Norway",
+    "code": "NO",
+    "phoneCode": "+47",
+    "logo": "https://flagcdn.com/no.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "e1dab7f9-05b0-4059-bc82-cbfe1f43776e",
+    "name": "Oman",
+    "code": "OM",
+    "phoneCode": "+968",
+    "logo": "https://flagcdn.com/om.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "2d55af6d-a2fd-4a63-92b1-f7dde454bc2c",
+    "name": "Pakistan",
+    "code": "PK",
+    "phoneCode": "+92",
+    "logo": "https://flagcdn.com/pk.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "770fb65a-c439-4fc9-970c-33e1a0fcad7c",
+    "name": "Palau",
+    "code": "PW",
+    "phoneCode": "+680",
+    "logo": "https://flagcdn.com/pw.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "6a989de6-18ad-4de7-a659-88029d9853db",
+    "name": "Palestine, State of",
+    "code": "PS",
+    "phoneCode": "+970",
+    "logo": "https://flagcdn.com/ps.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "668d511d-5d8c-4314-8125-3351d527636e",
+    "name": "Panama",
+    "code": "PA",
+    "phoneCode": "+507",
+    "logo": "https://flagcdn.com/pa.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "c3e2385c-d007-4173-9744-e581df3ad68a",
+    "name": "Papua New Guinea",
+    "code": "PG",
+    "phoneCode": "+675",
+    "logo": "https://flagcdn.com/pg.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "99becabc-f65f-4dd6-b732-d9f2f1e14398",
+    "name": "Paraguay",
+    "code": "PY",
+    "phoneCode": "+595",
+    "logo": "https://flagcdn.com/py.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "9de57700-8e33-4466-8f6f-750b22debcdc",
+    "name": "Peru",
+    "code": "PE",
+    "phoneCode": "+51",
+    "logo": "https://flagcdn.com/pe.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "195c95c7-91da-4828-9faa-8bb75db6690e",
+    "name": "Philippines",
+    "code": "PH",
+    "phoneCode": "+63",
+    "logo": "https://flagcdn.com/ph.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "e0860ef1-60cc-47dd-97e2-98d6958bba52",
+    "name": "Pitcairn",
+    "code": "PN",
+    "phoneCode": "+64",
+    "logo": "https://flagcdn.com/pn.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "153b9b3c-35c2-4dac-88b5-0966874a3d7d",
+    "name": "Poland",
+    "code": "PL",
+    "phoneCode": "+48",
+    "logo": "https://flagcdn.com/pl.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "625f93f8-41ef-4de2-b6cd-f12a6b5b2a11",
+    "name": "Portugal",
+    "code": "PT",
+    "phoneCode": "+351",
+    "logo": "https://flagcdn.com/pt.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "2ed47ed9-6027-4064-8865-2f12591b1ec7",
+    "name": "Qatar",
+    "code": "QA",
+    "phoneCode": "+974",
+    "logo": "https://flagcdn.com/qa.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "84b2d596-97f8-4f06-8cb8-ce1ab44c576b",
+    "name": "Republic of Kosovo",
+    "code": "XK",
+    "phoneCode": "+383",
+    "logo": "https://flagcdn.com/xk.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "57c07c29-f906-47f8-be64-0298c99c75c0",
+    "name": "Romania",
+    "code": "RO",
+    "phoneCode": "+40",
+    "logo": "https://flagcdn.com/ro.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "ae257976-2178-4a36-adca-29efa576a7fc",
+    "name": "Russian Federation",
+    "code": "RU",
+    "phoneCode": "+7",
+    "logo": "https://flagcdn.com/ru.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "98700bb6-823b-457e-bd21-f33ff24157bc",
+    "name": "Rwanda",
+    "code": "RW",
+    "phoneCode": "+250",
+    "logo": "https://flagcdn.com/rw.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "e6ea6739-89b1-40a0-aba4-5bce04ad8590",
+    "name": "Saint Kitts and Nevis",
+    "code": "KN",
+    "phoneCode": "+1",
+    "logo": "https://flagcdn.com/kn.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "63b935f3-1384-4731-81ef-e8b070a62dc8",
+    "name": "Saint Lucia",
+    "code": "LC",
+    "phoneCode": "+1",
+    "logo": "https://flagcdn.com/lc.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "98a4809b-b73c-415c-b836-5c7a663a60fa",
+    "name": "Saint Vincent and the Grenadines",
+    "code": "VC",
+    "phoneCode": "+1",
+    "logo": "https://flagcdn.com/vc.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "304fe4ea-e4f1-4135-98f0-b5297ea90220",
+    "name": "Samoa",
+    "code": "WS",
+    "phoneCode": "+685",
+    "logo": "https://flagcdn.com/ws.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "bf12f638-afa3-46fb-8958-0972880935c8",
+    "name": "San Marino",
+    "code": "SM",
+    "phoneCode": "+378",
+    "logo": "https://flagcdn.com/sm.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "4d00de98-45ad-4120-ae07-d89b1c8b06cd",
+    "name": "Sao Tome and Principe",
+    "code": "ST",
+    "phoneCode": "+239",
+    "logo": "https://flagcdn.com/st.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "73e9bbe0-ef15-481b-9966-928980540b4c",
+    "name": "Saudi Arabia",
+    "code": "SA",
+    "phoneCode": "+966",
+    "logo": "https://flagcdn.com/sa.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "d4cde4e9-57c9-4dda-89c0-a2efbd38191b",
+    "name": "Senegal",
+    "code": "SN",
+    "phoneCode": "+221",
+    "logo": "https://flagcdn.com/sn.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "c84eb604-6524-4b39-88fc-0d55117cde00",
+    "name": "Serbia",
+    "code": "RS",
+    "phoneCode": "+381",
+    "logo": "https://flagcdn.com/rs.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "ed9d584d-aba2-4c29-ab9a-b35b32e47393",
+    "name": "Seychelles",
+    "code": "SC",
+    "phoneCode": "+248",
+    "logo": "https://flagcdn.com/sc.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "67ef1ecf-f331-49c7-a198-7ff353a19c27",
+    "name": "Sierra Leone",
+    "code": "SL",
+    "phoneCode": "+232",
+    "logo": "https://flagcdn.com/sl.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "8307a40f-fd87-49fc-87a9-41cf455c7e32",
+    "name": "Singapore",
+    "code": "SG",
+    "phoneCode": "+65",
+    "logo": "https://flagcdn.com/sg.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "0ccc7547-6a7a-4f2a-a5da-fc87a733303b",
+    "name": "Slovakia",
+    "code": "SK",
+    "phoneCode": "+421",
+    "logo": "https://flagcdn.com/sk.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "896617c1-e1f7-423b-a136-8487f161cce8",
+    "name": "Slovenia",
+    "code": "SI",
+    "phoneCode": "+386",
+    "logo": "https://flagcdn.com/si.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "975865e9-b649-4969-888e-31319070ad3e",
+    "name": "Solomon Islands",
+    "code": "SB",
+    "phoneCode": "+677",
+    "logo": "https://flagcdn.com/sb.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "9430a096-7d79-4191-b442-6d1167c2daec",
+    "name": "Somalia",
+    "code": "SO",
+    "phoneCode": "+252",
+    "logo": "https://flagcdn.com/so.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "74032f46-21aa-4533-a7d0-14899beb1c87",
+    "name": "South Africa",
+    "code": "ZA",
+    "phoneCode": "+27",
+    "logo": "https://flagcdn.com/za.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "8c68063c-1bad-4a5e-8166-0a9ded040be3",
+    "name": "South Sudan",
+    "code": "SS",
+    "phoneCode": "+211",
+    "logo": "https://flagcdn.com/ss.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "8d7ad652-10ae-4de8-824b-9ea40c304b67",
+    "name": "Spain",
+    "code": "ES",
+    "phoneCode": "+34",
+    "logo": "https://flagcdn.com/es.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "0f3ada0a-cfc0-4d67-aa66-11c2c2f4a029",
+    "name": "Sri Lanka",
+    "code": "LK",
+    "phoneCode": "+94",
+    "logo": "https://flagcdn.com/lk.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "5d26ddd4-a563-4644-adba-d2fdc0c65fe9",
+    "name": "Sudan",
+    "code": "SD",
+    "phoneCode": "+249",
+    "logo": "https://flagcdn.com/sd.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "caa886ce-563f-4691-925a-a7d5f68fd644",
+    "name": "Suriname",
+    "code": "SR",
+    "phoneCode": "+597",
+    "logo": "https://flagcdn.com/sr.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "7daf0965-ebd0-4add-ae89-138c74e41263",
+    "name": "Swaziland",
+    "code": "SZ",
+    "phoneCode": "+268",
+    "logo": "https://flagcdn.com/sz.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "6382ed18-2199-4eea-a8ca-16ad46c5ee8a",
+    "name": "Sweden",
+    "code": "SE",
+    "phoneCode": "+46",
+    "logo": "https://flagcdn.com/se.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "508aa0ab-0053-46c5-ac11-03430f7005f1",
+    "name": "Switzerland",
+    "code": "CH",
+    "phoneCode": "+41",
+    "logo": "https://flagcdn.com/ch.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "bd0ad50c-80e1-4f8d-bd2f-2b8c65cbbc17",
+    "name": "Syrian Arab Republic",
+    "code": "SY",
+    "phoneCode": "+963",
+    "logo": "https://flagcdn.com/sy.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "12db4eaf-5011-4b60-90ff-ba0aa6a44f8c",
+    "name": "Taiwan",
+    "code": "TW",
+    "phoneCode": "+886",
+    "logo": "https://flagcdn.com/tw.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "a3d22614-f0cc-4e66-aa7e-195b1851d6f4",
+    "name": "Tajikistan",
+    "code": "TJ",
+    "phoneCode": "+992",
+    "logo": "https://flagcdn.com/tj.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "b64161ea-21d9-41f8-8ce5-83a289ed7cfd",
+    "name": "Tanzania, United Republic of",
+    "code": "TZ",
+    "phoneCode": "+255",
+    "logo": "https://flagcdn.com/tz.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "7e7117ef-9f76-4de0-bc3a-9e87d602766c",
+    "name": "Thailand",
+    "code": "TH",
+    "phoneCode": "+66",
+    "logo": "https://flagcdn.com/th.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "691b4cbd-3798-4778-8e78-0a22f9d9924a",
+    "name": "Timor-Leste",
+    "code": "TL",
+    "phoneCode": "+670",
+    "logo": "https://flagcdn.com/tl.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "563fa7c7-5a65-4875-a08f-71a0b4afe56e",
+    "name": "Togo",
+    "code": "TG",
+    "phoneCode": "+228",
+    "logo": "https://flagcdn.com/tg.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "95bdcbe1-5c7e-4e78-b26a-9e311a98b11a",
+    "name": "Tonga",
+    "code": "TO",
+    "phoneCode": "+676",
+    "logo": "https://flagcdn.com/to.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "46769390-b590-4525-a0a5-bda413721a90",
+    "name": "Trinidad and Tobago",
+    "code": "TT",
+    "phoneCode": "+1",
+    "logo": "https://flagcdn.com/tt.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "bdc0ee94-f576-485a-9dea-b7b218ef9252",
+    "name": "Tunisia",
+    "code": "TN",
+    "phoneCode": "+216",
+    "logo": "https://flagcdn.com/tn.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "3d93d304-8dae-46dd-9dda-0fbdd5fc58b8",
+    "name": "Turkey",
+    "code": "TR",
+    "phoneCode": "+90",
+    "logo": "https://flagcdn.com/tr.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "95fd3083-683e-4805-8d8c-2d33897c12ed",
+    "name": "Turkmenistan",
+    "code": "TM",
+    "phoneCode": "+993",
+    "logo": "https://flagcdn.com/tm.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "f02564ff-7356-45ac-b3eb-3d49d84c3a3f",
+    "name": "Tuvalu",
+    "code": "TV",
+    "phoneCode": "+688",
+    "logo": "https://flagcdn.com/tv.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "db8b31cd-4a75-477f-8c08-0bb7ee14125c",
+    "name": "Uganda",
+    "code": "UG",
+    "phoneCode": "+256",
+    "logo": "https://flagcdn.com/ug.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "6ff6026e-ba35-4b34-9aeb-504f8b84d530",
+    "name": "Ukraine",
+    "code": "UA",
+    "phoneCode": "+380",
+    "logo": "https://flagcdn.com/ua.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "09f307a5-7cee-4525-9e7e-e85059481261",
+    "name": "United Arab Emirates",
+    "code": "AE",
+    "phoneCode": "+971",
+    "logo": "https://flagcdn.com/ae.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "3e2d48e5-a0dd-4f80-a018-5e54bcb9c9b2",
+    "name": "United Kingdom of Great Britain and Northern Ireland",
+    "code": "GB",
+    "phoneCode": "+44",
+    "logo": "https://flagcdn.com/gb.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "d975ef73-580a-490c-9ca1-5dab1bbbda14",
+    "name": "United States of America",
+    "code": "US",
+    "phoneCode": "+1",
+    "logo": "https://flagcdn.com/us.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "b48c3a9d-ac4e-46c1-b418-015c03be6865",
+    "name": "Uruguay",
+    "code": "UY",
+    "phoneCode": "+598",
+    "logo": "https://flagcdn.com/uy.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "873b03a8-e13f-422e-9b3d-0721b5b44038",
+    "name": "Vanuatu",
+    "code": "VU",
+    "phoneCode": "+678",
+    "logo": "https://flagcdn.com/vu.svg",
+    "region": "Oceania"
+  },
+  {
+    "id": "a07bf43d-b98d-4cc3-8df6-f54403a8e33e",
+    "name": "Vatican City",
+    "code": "VA",
+    "phoneCode": "+379",
+    "logo": "https://flagcdn.com/va.svg",
+    "region": "Europe"
+  },
+  {
+    "id": "ea58b427-aa7e-4a56-ac48-776dc7c5d476",
+    "name": "Venezuela (Bolivarian Republic of)",
+    "code": "VE",
+    "phoneCode": "+58",
+    "logo": "https://flagcdn.com/ve.svg",
+    "region": "Americas"
+  },
+  {
+    "id": "296d02b0-4917-4501-9a60-df79c564257a",
+    "name": "Vietnam",
+    "code": "VN",
+    "phoneCode": "+84",
+    "logo": "https://flagcdn.com/vn.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "fd1b5aa3-ef49-4c7e-ba5c-cd36901e69d1",
+    "name": "Yemen",
+    "code": "YE",
+    "phoneCode": "+967",
+    "logo": "https://flagcdn.com/ye.svg",
+    "region": "Asia"
+  },
+  {
+    "id": "c736de71-03ab-4e43-b3f2-4325257a9123",
+    "name": "Zambia",
+    "code": "ZM",
+    "phoneCode": "+260",
+    "logo": "https://flagcdn.com/zm.svg",
+    "region": "Africa"
+  },
+  {
+    "id": "d2adfc94-a0ae-462f-b749-97c0ff273c4b",
+    "name": "Zimbabwe",
+    "code": "ZW",
+    "phoneCode": "+263",
+    "logo": "https://flagcdn.com/zw.svg",
+    "region": "Africa"
+  }
+]

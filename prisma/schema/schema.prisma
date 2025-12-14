@@ -1,0 +1,179 @@
+// This is your Prisma schema file for Future Me App
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ==================== USER & AUTHENTICATION ====================
+
+model User {
+  id       String  @id @default(uuid())
+  email    String  @unique
+  password String
+  name     String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  // Email verification (optional)
+  isEmailVerified Boolean  @default(false)
+
+  // Relations
+  letters       Letter[]       @relation("SenderLetters")
+  notifications Notification[]
+  tokens        Token[]
+  authCode      AuthCode?
+
+  @@map("users")
+}
+
+// ==================== LETTERS ====================
+
+enum LetterStatus {
+  DRAFT
+  SCHEDULED
+  DELIVERED
+  FAILED
+}
+
+model Letter {
+  id String @id @default(uuid())
+
+  // Content
+  subject String?
+  content String  @db.Text
+
+  // Sender & Recipient
+  senderEmail    String
+  senderName     String? // Optional sender signature
+  recipientEmail String
+  recipientName  String? // Optional recipient name
+
+  // User relation (null if sent by guest)
+  userId String?
+  user   User?   @relation("SenderLetters", fields: [userId], references: [id], onDelete: Cascade)
+
+  // Scheduling
+  deliveryDate DateTime // When to deliver the letter
+  deliveredAt  DateTime? // Actual delivery timestamp
+  status       LetterStatus @default(SCHEDULED)
+
+  // Metadata
+  isGuest   Boolean  @default(false) // True if sent by guest
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  attachments Attachment[]
+
+  @@index([senderEmail, recipientEmail]) // For guest letter tracking
+  @@index([userId])
+  @@index([status])
+  @@index([deliveryDate])
+  @@map("letters")
+}
+
+// ==================== GUEST LETTER TRACKING ====================
+
+// Track guest submissions to enforce 1 letter per recipient rule
+model GuestLetterTracking {
+  id             String @id @default(uuid())
+  guestEmail     String // Guest's email
+  recipientEmail String // Recipient's email
+  letterId       String // Reference to the letter sent
+
+  createdAt DateTime @default(now())
+
+  @@unique([guestEmail, recipientEmail]) // Ensures 1 letter per guest-recipient pair
+  @@map("guest_letter_tracking")
+}
+
+// ==================== MEDIA / ATTACHMENTS ====================
+
+enum AttachmentType {
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+}
+
+model Attachment {
+  id String @id @default(uuid())
+
+  letterId String
+  letter   Letter @relation(fields: [letterId], references: [id], onDelete: Cascade)
+
+  fileUrl String // URL from cloud storage (S3, Cloudinary, etc.)
+  type    AttachmentType // Image, video, audio, or document
+
+  createdAt DateTime @default(now())
+
+  @@index([letterId])
+  @@map("attachments")
+}
+
+// ==================== NOTIFICATIONS ====================
+
+enum NotificationType {
+  LETTER_SCHEDULED
+  LETTER_DELIVERED
+  REMINDER
+  SYSTEM
+}
+
+enum NotificationChannel {
+  EMAIL
+  IN_APP
+}
+
+model Notification {
+  id String @id @default(uuid())
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Content
+  type    NotificationType
+  channel NotificationChannel
+  title   String
+  message String              @db.Text
+
+  // Metadata
+  isRead Boolean   @default(false)
+  sentAt DateTime  @default(now())
+  readAt DateTime?
+
+  // Optional reference to letter
+  letterId String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([isRead])
+  @@map("notifications")
+}
+
+// ==================== SYSTEM / ADMIN ====================
+
+// Optional: Track email delivery attempts and status
+model EmailLog {
+  id String @id @default(uuid())
+
+  letterId       String
+  recipientEmail String
+
+  status            String // "sent", "failed", "bounced"
+  provider          String? // "sendgrid", "resend", etc.
+  providerMessageId String?
+
+  errorMessage String? @db.Text
+
+  sentAt DateTime @default(now())
+
+  @@index([letterId])
+  @@map("email_logs")
+}

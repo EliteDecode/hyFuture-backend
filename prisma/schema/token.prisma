@@ -1,0 +1,15 @@
+model Token{
+    id String @id @default(uuid())
+    userId String 
+    refreshToken String @db.Text
+    user User @relation(fields: [userId], references: [id])
+}
+
+model AuthCode {
+    id String @id @default(uuid())
+    userId String @unique
+    code String @db.Text
+    expiresAt DateTime
+    createdAt DateTime @default(now())
+    user User @relation(fields: [userId], references: [id])
+}

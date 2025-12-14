@@ -1,0 +1,620 @@
+{
+  "info": {
+    "_postman_id": "80097551-0ec7-4013-b4e6-1a5045284590",
+    "name": "Future Me API",
+    "description": "Future Me API collection for time capsule letters. Includes authentication, letter creation and management, drafts, notifications, and more. All requests target the NestJS backend; update the collection variables to match your environment before running.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "23228058"
+  },
+  "item": [
+    {
+      "name": "user",
+      "item": [
+        {
+          "name": "User Onboarding",
+          "item": [
+            {
+              "name": "Register User",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"Testpass123!\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/register",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "register"]
+                },
+                "description": "Create a new Future Me user account. Email must be unique; password requires ≥8 characters. A verification code will be sent to the email. Guest letters sent from this email will be automatically linked."
+              },
+              "response": []
+            },
+            {
+              "name": "Verify Auth Code",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"ce285529-0508-4112-bd64-56d4156af2d6\",\n  \"code\": \"654353\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/verify-auth-code",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "verify-auth-code"]
+                },
+                "description": "Complete email verification using the 6-digit code sent to the user's email. Returns access and refresh tokens. Guest letters sent from this email will be automatically linked to the account."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Sessions & Tokens",
+          "item": [
+            {
+              "name": "Login User",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"Testpass123!\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/login",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "login"]
+                },
+                "description": "Authenticate a verified user. Returns an access token in the response body and sets a secure httpOnly refreshToken cookie."
+              },
+              "response": []
+            },
+            {
+              "name": "Renew Tokens",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/renew-tokens",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "renew-tokens"]
+                },
+                "description": "Renew tokens using the refreshToken httpOnly cookie sent with the request. No request body is required; a new access token is returned and the refresh cookie is rotated."
+              },
+              "response": []
+            },
+            {
+              "name": "Logout User",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/logout",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "logout"]
+                },
+                "description": "Logs out the user by revoking the current refresh token and clearing the refreshToken httpOnly cookie."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Password Recovery",
+          "item": [
+            {
+              "name": "Forgot Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{userEmail}}\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/forgot-password",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "forgot-password"]
+                },
+                "description": "Trigger a password reset email/code for the user account."
+              },
+              "response": []
+            },
+            {
+              "name": "Reset Password",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{userEmail}}\",\n  \"password\": \"Newpass123!\",\n  \"confirmPassword\": \"Newpass123!\",\n  \"code\": \"{{resetCode}}\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/reset-password",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "reset-password"]
+                },
+                "description": "Confirm the reset code and set a new password."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Code Resend",
+          "item": [
+            {
+              "name": "Resend Verification Code",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{userEmail}}\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/resend-verification-code",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "resend-verification-code"]
+                },
+                "description": "Resends the email verification auth code for unverified users."
+              },
+              "response": []
+            },
+            {
+              "name": "Resend Password Code",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"{{userEmail}}\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/resend-password-code",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "resend-password-code"]
+                },
+                "description": "Triggers another password-reset auth code using the same flow as forgot password."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "countries",
+      "item": [
+        {
+          "name": "Get All Countries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/countries?region=AFRICA",
+              "host": ["{{baseUrl}}"],
+              "path": ["countries"],
+              "query": [
+                {
+                  "key": "region",
+                  "value": "AFRICA",
+                  "description": "Optional: Filter by region (AFRICA, AMERICAS, ASIA, EUROPE, OCEANIA)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get all countries. Optionally filter by region (AFRICA, AMERICAS, ASIA, EUROPE, OCEANIA)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Country by Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/countries/NG",
+              "host": ["{{baseUrl}}"],
+              "path": ["countries", "NG"]
+            },
+            "description": "Get a specific country by its ISO code (e.g., NG for Nigeria, US for United States)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Country",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/countries/my-country",
+              "host": ["{{baseUrl}}"],
+              "path": ["countries", "my-country"]
+            },
+            "description": "Determine the caller's country based on their IP address using an external IP geolocation service."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Letters",
+      "item": [
+        {
+          "name": "Create Guest Letter",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"senderEmail\": \"guest@example.com\",\n  \"senderName\": \"John Doe\",\n  \"subject\": \"A Letter to My Future Self\",\n  \"content\": \"Dear Future Me, I hope you're doing well and have achieved all your goals...\",\n  \"recipientEmail\": \"future@example.com\",\n  \"recipientName\": \"Future Me\",\n  \"deliveryDate\": \"2026-12-25T10:00:00Z\",\n  \"attachments\": [\n    {\n      \"fileUrl\": \"https://example.com/files/photo.jpg\",\n      \"type\": \"IMAGE\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/letters/guest",
+              "host": ["{{baseUrl}}"],
+              "path": ["letters", "guest"]
+            },
+            "description": "Create a letter as a guest user. Guests can send only 1 letter per recipient email. Rate limited to 10 requests per hour."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Authenticated Letter",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject\": \"A Letter to My Future Self\",\n  \"content\": \"Dear Future Me, I hope you're doing well and have achieved all your goals...\",\n  \"recipientEmail\": \"future@example.com\",\n  \"recipientName\": \"Future Me\",\n  \"deliveryDate\": \"2026-12-25T10:00:00Z\",\n  \"attachments\": [\n    {\n      \"fileUrl\": \"https://example.com/files/photo.jpg\",\n      \"type\": \"IMAGE\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/letters",
+              "host": ["{{baseUrl}}"],
+              "path": ["letters"]
+            },
+            "description": "Create a letter as an authenticated user. Rate limited to 20 requests per hour. Requires JWT authentication."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Letters",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/letters?status=SCHEDULED",
+              "host": ["{{baseUrl}}"],
+              "path": ["letters"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "SCHEDULED",
+                  "description": "Optional: Filter by status (DRAFT, SCHEDULED, DELIVERED, FAILED)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get all letters for the authenticated user. Letters with future delivery dates are returned in locked format. Optionally filter by status."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Letter by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/letters/{{letterId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["letters", "{{letterId}}"]
+            },
+            "description": "Get a specific letter by ID. Only accessible if the delivery date has been reached. Returns 403 if delivery date hasn't been reached yet."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Draft",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject\": \"Draft Letter\",\n  \"content\": \"This is a draft that I can edit later...\",\n  \"recipientEmail\": \"future@example.com\",\n  \"recipientName\": \"Future Me\",\n  \"deliveryDate\": \"2026-12-25T10:00:00Z\",\n  \"attachments\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/letters/draft",
+              "host": ["{{baseUrl}}"],
+              "path": ["letters", "draft"]
+            },
+            "description": "Create a letter as a draft. Drafts can be updated later before sending. Drafts are always visible to the user (not locked)."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Draft",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject\": \"Updated Draft Subject\",\n  \"content\": \"Updated content...\",\n  \"attachments\": [\n    {\n      \"fileUrl\": \"https://example.com/files/new-photo.jpg\",\n      \"type\": \"IMAGE\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/letters/{{letterId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["letters", "{{letterId}}"]
+            },
+            "description": "Update a draft letter. Only letters with DRAFT status can be updated. Sent letters cannot be modified. Attachments are replaced if provided."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Letter",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/letters/{{letterId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["letters", "{{letterId}}"]
+            },
+            "description": "Delete a letter. Only letters with delivery dates that have passed can be deleted. Returns 400 if delivery date hasn't passed yet."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Get All Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notifications",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications"]
+            },
+            "description": "Get all notifications for the authenticated user, ordered by creation date (newest first)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Unread Count",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/unread-count",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", "unread-count"]
+            },
+            "description": "Get the count of unread notifications for the authenticated user."
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Notification as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/{{notificationId}}/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", "{{notificationId}}", "read"]
+            },
+            "description": "Mark a specific notification as read."
+          },
+          "response": []
+        },
+        {
+          "name": "Mark All Notifications as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notifications/read-all",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", "read-all"]
+            },
+            "description": "Mark all notifications for the authenticated user as read."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Waitlist",
+      "item": [
+        {
+          "name": "Join Waitlist",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{userEmail}}\",\n  \"name\": \"John Doe\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/waitlist",
+              "host": ["{{baseUrl}}"],
+              "path": ["waitlist"]
+            },
+            "description": "Add your email and name to the HyFuture waitlist. You'll receive a confirmation email and be notified when HyFuture goes live."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4001/api/v1"
+    },
+    {
+      "key": "base_url",
+      "value": "http://localhost:4001/api/v1"
+    },
+    {
+      "key": "userEmail",
+      "value": "user@example.com"
+    },
+    {
+      "key": "userId",
+      "value": "replace-with-user-id"
+    },
+    {
+      "key": "authCode",
+      "value": "123456"
+    },
+    {
+      "key": "accessToken",
+      "value": "replace-with-access-token"
+    },
+    {
+      "key": "refreshToken",
+      "value": "replace-with-refresh-token"
+    },
+    {
+      "key": "resetCode",
+      "value": "654321"
+    },
+    {
+      "key": "letterId",
+      "value": "replace-with-letter-id"
+    },
+    {
+      "key": "notificationId",
+      "value": "replace-with-notification-id"
+    }
+  ]
+}

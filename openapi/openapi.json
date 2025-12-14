@@ -1,0 +1,1920 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Future Me API",
+    "description": "Future Me is a time capsule letter platform that allows users to send letters to their future self or loved ones, scheduled for delivery on a future date. This API provides endpoints for user authentication, letter creation and management, draft system, scheduled delivery, notifications, and media attachments.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Future Me Support",
+      "email": "support@futureme.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://backend.hyfuture.app/api/v1",
+      "description": "Production Server"
+    },
+    {
+      "url": "http://localhost:4001/api/v1",
+      "description": "Local Development Server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "user",
+      "description": "User authentication and management endpoints"
+    },
+    {
+      "name": "User Onboarding",
+      "description": "User registration and verification"
+    },
+    {
+      "name": "Sessions & Tokens",
+      "description": "Login, logout, and token management"
+    },
+    {
+      "name": "Password Recovery",
+      "description": "Password reset and recovery flows"
+    },
+    {
+      "name": "Code Resend",
+      "description": "Resend verification and password reset codes"
+    },
+    {
+      "name": "Countries",
+      "description": "Public endpoints for retrieving country information"
+    },
+    {
+      "name": "Letters",
+      "description": "Letter creation, management, and retrieval endpoints. Supports both guest and authenticated users."
+    },
+    {
+      "name": "Notifications",
+      "description": "Notification management endpoints for letter scheduling and delivery updates"
+    },
+    {
+      "name": "Waitlist",
+      "description": "Waitlist signup endpoints for early access to HyFuture"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Enter your JWT access token. Get it from the login or verify-auth-code endpoints."
+      }
+    },
+    "schemas": {
+      "RegisterUserRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100,
+            "example": "John Doe",
+            "description": "Optional user name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 100,
+            "format": "password",
+            "example": "Testpass123!"
+          }
+        }
+      },
+      "VerifyAuthCodeRequest": {
+        "type": "object",
+        "required": ["userId", "code"],
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "ce285529-0508-4112-bd64-56d4156af2d6"
+          },
+          "code": {
+            "type": "string",
+            "pattern": "^\\d{6}$",
+            "example": "654353",
+            "description": "6-digit verification code"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "adamma.okoro@example.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "Testpass123!"
+          }
+        }
+      },
+      "RenewTokensRequest": {
+        "type": "object",
+        "required": ["refreshToken"],
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        }
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "adamma.okoro@example.com"
+          }
+        }
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "required": ["email", "password", "confirmPassword", "code"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "adamma.okoro@example.com"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 100,
+            "format": "password",
+            "example": "Newpass123!"
+          },
+          "confirmPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 100,
+            "format": "password",
+            "example": "Newpass123!"
+          },
+          "code": {
+            "type": "string",
+            "example": "123456",
+            "description": "Password reset code"
+          }
+        }
+      },
+      "ResendAuthCodeRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "adamma.okoro@example.com"
+          }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "isEmailVerified": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TokenResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        }
+      },
+      "MessageResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Operation completed successfully"
+          }
+        }
+      },
+      "RegisterResponse": {
+        "type": "object",
+        "properties": {
+          "newUser": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "message": {
+            "type": "string",
+            "example": "User registered successfully. Please verify your email."
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Validation failed"
+          },
+          "error": {
+            "type": "string",
+            "example": "Bad Request"
+          }
+        }
+      },
+      "Country": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "55887f64-15d2-4676-9026-caef50838303"
+          },
+          "name": {
+            "type": "string",
+            "example": "Nigeria"
+          },
+          "code": {
+            "type": "string",
+            "example": "NG",
+            "description": "ISO 3166-1 alpha-2 country code"
+          },
+          "phoneCode": {
+            "type": "string",
+            "example": "+234"
+          },
+          "logo": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://flagcdn.com/ng.svg"
+          },
+          "region": {
+            "type": "string",
+            "enum": ["AFRICA", "AMERICAS", "ASIA", "EUROPE", "OCEANIA"],
+            "example": "AFRICA"
+          }
+        }
+      },
+      "CountriesResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Country"
+        }
+      },
+      "WaitlistRequest": {
+        "type": "object",
+        "required": ["email", "name"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com",
+            "description": "Valid email address"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "example": "John Doe",
+            "description": "User's name"
+          }
+        }
+      },
+      "WaitlistResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Successfully added to waitlist"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "example": "user@example.com"
+              },
+              "name": {
+                "type": "string",
+                "example": "John Doe"
+              }
+            }
+          }
+        }
+      },
+      "Attachment": {
+        "type": "object",
+        "required": ["fileUrl", "type"],
+        "properties": {
+          "fileUrl": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://example.com/files/photo.jpg",
+            "description": "URL to the attached file"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["IMAGE", "VIDEO", "AUDIO", "DOCUMENT"],
+            "example": "IMAGE",
+            "description": "Type of attachment"
+          }
+        }
+      },
+      "CreateLetterRequest": {
+        "type": "object",
+        "required": ["content", "recipientEmail", "deliveryDate"],
+        "properties": {
+          "subject": {
+            "type": "string",
+            "maxLength": 200,
+            "example": "A Letter to My Future Self",
+            "description": "Optional subject line for the letter"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 10000,
+            "example": "Dear Future Me, I hope you're doing well...",
+            "description": "Letter content (supports rich text)"
+          },
+          "recipientEmail": {
+            "type": "string",
+            "format": "email",
+            "example": "future@example.com",
+            "description": "Email address of the recipient"
+          },
+          "recipientName": {
+            "type": "string",
+            "example": "Future Me",
+            "description": "Optional name of the recipient"
+          },
+          "deliveryDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-12-25T10:00:00Z",
+            "description": "ISO 8601 date-time when the letter should be delivered"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Attachment"
+            },
+            "description": "Optional media attachments (photos, videos, audio, documents)"
+          }
+        }
+      },
+      "CreateGuestLetterRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CreateLetterRequest"
+          },
+          {
+            "type": "object",
+            "required": ["senderEmail"],
+            "properties": {
+              "senderEmail": {
+                "type": "string",
+                "format": "email",
+                "example": "guest@example.com",
+                "description": "Email address of the guest sender (required for guest letters)"
+              },
+              "senderName": {
+                "type": "string",
+                "example": "John Doe",
+                "description": "Optional name of the sender"
+              }
+            }
+          }
+        ]
+      },
+      "UpdateLetterRequest": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string",
+            "maxLength": 200,
+            "example": "Updated Subject"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 10000,
+            "example": "Updated content..."
+          },
+          "recipientEmail": {
+            "type": "string",
+            "format": "email",
+            "example": "newrecipient@example.com"
+          },
+          "recipientName": {
+            "type": "string",
+            "example": "New Recipient Name"
+          },
+          "deliveryDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2027-01-01T10:00:00Z"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Attachment"
+            },
+            "description": "Replace all attachments. Provide empty array to remove all attachments."
+          }
+        }
+      },
+      "Letter": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "subject": {
+            "type": "string",
+            "nullable": true,
+            "example": "A Letter to My Future Self"
+          },
+          "content": {
+            "type": "string",
+            "example": "Dear Future Me..."
+          },
+          "senderEmail": {
+            "type": "string",
+            "format": "email",
+            "example": "sender@example.com"
+          },
+          "senderName": {
+            "type": "string",
+            "nullable": true,
+            "example": "John Doe"
+          },
+          "recipientEmail": {
+            "type": "string",
+            "format": "email",
+            "example": "recipient@example.com"
+          },
+          "recipientName": {
+            "type": "string",
+            "nullable": true,
+            "example": "Future Me"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "example": "550e8400-e29b-41d4-a716-446655440001"
+          },
+          "deliveryDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-12-25T10:00:00Z"
+          },
+          "deliveredAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2026-12-25T10:00:00Z"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["DRAFT", "SCHEDULED", "DELIVERED", "FAILED"],
+            "example": "SCHEDULED"
+          },
+          "isGuest": {
+            "type": "boolean",
+            "example": false
+          },
+          "locked": {
+            "type": "boolean",
+            "example": true,
+            "description": "True if letter is locked (delivery date not reached). Only basic info returned when locked."
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Attachment"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T10:00:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T10:00:00Z"
+          }
+        }
+      },
+      "LetterListResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Letter"
+        }
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "example": "550e8400-e29b-41d4-a716-446655440001"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "LETTER_SCHEDULED",
+              "LETTER_DELIVERED",
+              "REMINDER",
+              "SYSTEM"
+            ],
+            "example": "LETTER_SCHEDULED"
+          },
+          "channel": {
+            "type": "string",
+            "enum": ["EMAIL", "IN_APP"],
+            "example": "IN_APP"
+          },
+          "title": {
+            "type": "string",
+            "example": "Letter Scheduled"
+          },
+          "message": {
+            "type": "string",
+            "example": "Your letter has been scheduled for delivery."
+          },
+          "isRead": {
+            "type": "boolean",
+            "example": false
+          },
+          "sentAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T10:00:00Z"
+          },
+          "readAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2024-01-01T11:00:00Z"
+          },
+          "letterId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "example": "550e8400-e29b-41d4-a716-446655440002"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T10:00:00Z"
+          }
+        }
+      },
+      "NotificationListResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Notification"
+        }
+      },
+      "UnreadCountResponse": {
+        "type": "object",
+        "properties": {
+          "unreadCount": {
+            "type": "integer",
+            "example": 5,
+            "description": "Number of unread notifications"
+          }
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Operation completed successfully"
+          },
+          "data": {
+            "type": "object",
+            "description": "Response data (varies by endpoint)"
+          },
+          "statusCode": {
+            "type": "integer",
+            "example": 200
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["User Onboarding"],
+        "summary": "Register User",
+        "description": "Create a new Future Me user account. Email must be unique; password requires ≥8 characters. A verification code will be sent to the provided email address. Guest letters sent from this email will be automatically linked to the account.",
+        "operationId": "registerUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully. Verification code sent to email.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid input or user already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/verify-auth-code": {
+      "post": {
+        "tags": ["User Onboarding"],
+        "summary": "Verify Auth Code",
+        "description": "Complete email verification using the 6-digit code sent to the user's email. Returns access and refresh tokens upon successful verification. Any guest letters sent from this email will be automatically linked to the account.",
+        "operationId": "verifyAuthCode",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyAuthCodeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email verified successfully. Access and refresh tokens returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid or expired verification code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid verification code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Sessions & Tokens"],
+        "summary": "Login User",
+        "description": "Authenticate a verified user and receive access/refresh tokens. The account must be verified before login.",
+        "operationId": "loginUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful. Returns access and refresh tokens.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid credentials or unverified account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/renew-tokens": {
+      "post": {
+        "tags": ["Sessions & Tokens"],
+        "summary": "Renew Tokens",
+        "description": "Use the refreshToken httpOnly cookie to obtain a new access token and rotate the refresh token cookie, without re-authenticating. No request body is required.",
+        "operationId": "renewTokens",
+        "responses": {
+          "200": {
+            "description": "Tokens renewed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or expired refresh token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Sessions & Tokens"],
+        "summary": "Logout User",
+        "description": "Logs out the user by revoking the current refresh token associated with the refreshToken httpOnly cookie and clearing that cookie.",
+        "operationId": "logoutUser",
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing refresh token cookie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": ["Password Recovery"],
+        "summary": "Forgot Password",
+        "description": "Trigger a password reset email/code for the user account. A 6-digit reset code will be sent to the registered email address.",
+        "operationId": "forgotPassword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset code sent to email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "tags": ["Password Recovery"],
+        "summary": "Reset Password",
+        "description": "Confirm the reset code and set a new password. The code must match the one sent via email.",
+        "operationId": "resetPassword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid code, password mismatch, or validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or expired reset code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/resend-verification-code": {
+      "post": {
+        "tags": ["Code Resend"],
+        "summary": "Resend Verification Code",
+        "description": "Resends the email verification auth code for unverified users. Use this if you didn't receive the initial verification email.",
+        "operationId": "resendVerificationCode",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendAuthCodeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification code resent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid email or user already verified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/resend-password-code": {
+      "post": {
+        "tags": ["Code Resend"],
+        "summary": "Resend Password Code",
+        "description": "Triggers another password-reset auth code using the same flow as forgot password. Use this if you didn't receive the password reset code.",
+        "operationId": "resendPasswordCode",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset code resent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/countries": {
+      "get": {
+        "tags": ["Countries"],
+        "summary": "Get All Countries",
+        "description": "Retrieve all countries. Optionally filter by region (AFRICA, AMERICAS, ASIA, EUROPE, OCEANIA). Returns countries sorted alphabetically by name.",
+        "operationId": "getAllCountries",
+        "parameters": [
+          {
+            "name": "region",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["AFRICA", "AMERICAS", "ASIA", "EUROPE", "OCEANIA"]
+            },
+            "description": "Filter countries by region"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of countries retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CountriesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/countries/my-country": {
+      "get": {
+        "tags": ["Countries"],
+        "summary": "Get My Country",
+        "description": "Determine the caller's country based on their IP address. Uses the incoming request IP and an external IP geolocation service.",
+        "operationId": "getMyCountry",
+        "responses": {
+          "200": {
+            "description": "Country data derived from the caller's IP address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Raw IP geolocation response (see ipapi.co docs for exact shape).",
+                  "example": {
+                    "success": true,
+                    "message": "Country information retrieved successfully",
+                    "data": {
+                      "ip": "105.112.220.192",
+                      "network": "105.112.220.128/25",
+                      "version": "IPv4",
+                      "city": "Onitsha",
+                      "region": "Anambra",
+                      "region_code": "AN",
+                      "country": "NG",
+                      "country_name": "Nigeria",
+                      "country_code": "NG",
+                      "country_code_iso3": "NGA",
+                      "country_capital": "Abuja",
+                      "country_tld": ".ng",
+                      "continent_code": "AF",
+                      "in_eu": false,
+                      "postal": null,
+                      "latitude": 6.14978,
+                      "longitude": 6.78569,
+                      "timezone": "Africa/Lagos",
+                      "utc_offset": "+0100",
+                      "country_calling_code": "+234",
+                      "currency": "NGN",
+                      "currency_name": "Naira",
+                      "languages": "en-NG,ha,yo,ig,ff",
+                      "country_area": 923768,
+                      "country_population": 195874740,
+                      "asn": "AS36873",
+                      "org": "Celtel Nigeria Limited t.a ZAIN"
+                    },
+                    "statusCode": 200
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/countries/{code}": {
+      "get": {
+        "tags": ["Countries"],
+        "summary": "Get Country by Code",
+        "description": "Retrieve a specific country by its ISO 3166-1 alpha-2 country code (e.g., NG for Nigeria, US for United States).",
+        "operationId": "getCountryByCode",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Z]{2}$"
+            },
+            "description": "ISO 3166-1 alpha-2 country code",
+            "example": "NG"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Country retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Country"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Country not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/letters/guest": {
+      "post": {
+        "tags": ["Letters"],
+        "summary": "Create Guest Letter",
+        "description": "Create a letter as a guest user. Guests can send only 1 letter per recipient email. Rate limited to 10 requests per hour. Guest letters are automatically linked to user accounts when the guest signs up with the same email.",
+        "operationId": "createGuestLetter",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGuestLetterRequest"
+              },
+              "example": {
+                "senderEmail": "guest@example.com",
+                "senderName": "John Doe",
+                "subject": "A Letter to My Future Self",
+                "content": "Dear Future Me, I hope you're doing well...",
+                "recipientEmail": "future@example.com",
+                "recipientName": "Future Me",
+                "deliveryDate": "2026-12-25T10:00:00Z",
+                "attachments": [
+                  {
+                    "fileUrl": "https://example.com/files/photo.jpg",
+                    "type": "IMAGE"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Guest letter created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "example": {
+                  "success": true,
+                  "message": "Guest letter created successfully",
+                  "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "subject": "A Letter to My Future Self",
+                    "content": "Dear Future Me...",
+                    "status": "SCHEDULED",
+                    "deliveryDate": "2026-12-25T10:00:00Z"
+                  },
+                  "statusCode": 201
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid input or validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Guest has already sent a letter to this recipient. Sign up to send more.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "statusCode": 409,
+                  "message": "You have already sent a letter to this recipient. Please sign up to send more letters.",
+                  "error": "Conflict"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/letters": {
+      "post": {
+        "tags": ["Letters"],
+        "summary": "Create Authenticated Letter",
+        "description": "Create a letter as an authenticated user. Rate limited to 20 requests per hour. Letter is scheduled for delivery on the specified date.",
+        "operationId": "createAuthenticatedLetter",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLetterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Letter created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Letters"],
+        "summary": "Get All Letters",
+        "description": "Retrieve all letters for the authenticated user. Letters with delivery dates in the future are returned in locked format (minimal info). Optionally filter by status (DRAFT, SCHEDULED, DELIVERED, FAILED).",
+        "operationId": "getAllLetters",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["DRAFT", "SCHEDULED", "DELIVERED", "FAILED"]
+            },
+            "description": "Filter letters by status",
+            "example": "SCHEDULED"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Letters retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "example": {
+                  "success": true,
+                  "message": "Letters retrieved successfully",
+                  "data": [
+                    {
+                      "id": "550e8400-e29b-41d4-a716-446655440000",
+                      "deliveryDate": "2026-12-25T10:00:00Z",
+                      "status": "SCHEDULED",
+                      "locked": true,
+                      "createdAt": "2024-01-01T10:00:00Z",
+                      "updatedAt": "2024-01-01T10:00:00Z"
+                    },
+                    {
+                      "id": "550e8400-e29b-41d4-a716-446655440001",
+                      "subject": "Past Letter",
+                      "content": "Full content...",
+                      "status": "DELIVERED",
+                      "locked": false,
+                      "attachments": []
+                    }
+                  ],
+                  "statusCode": 200
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/letters/draft": {
+      "post": {
+        "tags": ["Letters"],
+        "summary": "Create Draft Letter",
+        "description": "Create a letter as a draft. Drafts can be updated later before sending. Drafts are always visible to the user (not locked).",
+        "operationId": "createDraft",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLetterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Draft saved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/letters/{id}": {
+      "get": {
+        "tags": ["Letters"],
+        "summary": "Get Letter by ID",
+        "description": "Retrieve a specific letter by ID. Only accessible if the delivery date has been reached. Returns 403 if delivery date hasn't been reached yet.",
+        "operationId": "getLetterById",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Letter ID",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Letter retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Delivery date has not been reached yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "statusCode": 403,
+                  "message": "You cannot view this letter because the delivery date has not been reached yet",
+                  "error": "Forbidden"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Letter not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Letters"],
+        "summary": "Update Draft Letter",
+        "description": "Update a draft letter. Only letters with DRAFT status can be updated. Sent letters cannot be modified. Attachments are replaced if provided.",
+        "operationId": "updateDraft",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Letter ID",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLetterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Draft updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Cannot update sent letter or invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Not authorized to update this letter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Letter not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Letters"],
+        "summary": "Delete Letter",
+        "description": "Delete a letter. Only letters with delivery dates that have passed can be deleted. Returns 400 if delivery date hasn't passed yet.",
+        "operationId": "deleteLetter",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Letter ID",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Letter deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Cannot delete letter before delivery date",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "message": "You cannot delete this letter because the delivery date has not passed yet",
+                  "error": "Bad Request"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Not authorized to delete this letter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Letter not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications": {
+      "get": {
+        "tags": ["Notifications"],
+        "summary": "Get All Notifications",
+        "description": "Retrieve all notifications for the authenticated user, ordered by creation date (newest first).",
+        "operationId": "getNotifications",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notifications retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "example": {
+                  "success": true,
+                  "message": "Notifications retrieved successfully",
+                  "data": [
+                    {
+                      "id": "550e8400-e29b-41d4-a716-446655440000",
+                      "type": "LETTER_SCHEDULED",
+                      "title": "Letter Scheduled",
+                      "message": "Your letter has been scheduled for delivery.",
+                      "isRead": false,
+                      "letterId": "550e8400-e29b-41d4-a716-446655440001",
+                      "createdAt": "2024-01-01T10:00:00Z"
+                    }
+                  ],
+                  "statusCode": 200
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/unread-count": {
+      "get": {
+        "tags": ["Notifications"],
+        "summary": "Get Unread Count",
+        "description": "Get the count of unread notifications for the authenticated user.",
+        "operationId": "getUnreadCount",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unread count retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "example": {
+                  "success": true,
+                  "message": "Unread count retrieved successfully",
+                  "data": {
+                    "unreadCount": 5
+                  },
+                  "statusCode": 200
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/{id}/read": {
+      "patch": {
+        "tags": ["Notifications"],
+        "summary": "Mark Notification as Read",
+        "description": "Mark a specific notification as read.",
+        "operationId": "markAsRead",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Notification ID",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification marked as read",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Notification not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/read-all": {
+      "patch": {
+        "tags": ["Notifications"],
+        "summary": "Mark All Notifications as Read",
+        "description": "Mark all notifications for the authenticated user as read.",
+        "operationId": "markAllAsRead",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All notifications marked as read",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "example": {
+                  "success": true,
+                  "message": "All notifications marked as read",
+                  "data": {
+                    "message": "All notifications marked as read"
+                  },
+                  "statusCode": 200
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/waitlist": {
+      "post": {
+        "tags": ["Waitlist"],
+        "summary": "Join Waitlist",
+        "description": "Add your email and name to the HyFuture waitlist. You'll receive a confirmation email and be notified when HyFuture goes live.",
+        "operationId": "joinWaitlist",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaitlistRequest"
+              },
+              "example": {
+                "email": "user@example.com",
+                "name": "John Doe"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully added to waitlist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitlistResponse"
+                },
+                "example": {
+                  "message": "Successfully added to waitlist",
+                  "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "email": "user@example.com",
+                    "name": "John Doe"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Email already exists in waitlist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "statusCode": 409,
+                  "message": "This email is already on the waitlist",
+                  "error": "Conflict"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
