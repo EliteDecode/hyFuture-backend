@@ -38,7 +38,7 @@ const sendMail = async ({ to, subject, html }: MailOptions): Promise<void> => {
   });
 
   await transporter.sendMail({
-    from: '"HyFuture Team" <"hello@hyfuture.app">',
+    from: '"HyFuture Team" <hello@hyfuture.app>',
     to: to,
     subject: subject,
     html: html,
