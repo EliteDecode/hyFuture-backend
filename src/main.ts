@@ -57,7 +57,7 @@ async function bootstrap() {
     console.warn('Swagger documentation not available:', error.message);
   }
 
-  const port = process.env.PORT ?? 4001;
+  const port = 4001;
   await app.listen(port);
 }
 bootstrap();
