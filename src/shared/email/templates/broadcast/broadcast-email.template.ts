@@ -5,22 +5,40 @@ const FUTURE_ME_LOGO_URL =
   process.env.FUTURE_ME_LOGO_URL ||
   'https://res.cloudinary.com/dns9drdhu/image/upload/v1764716758/logoHyFuture_sifmb3.png';
 
-export interface WaitlistConfirmationTemplateProps {
+const APP_URL = process.env.APP_URL || 'https://hyfuture.app';
+
+export interface BroadcastEmailTemplateProps {
   name: string;
-  email: string;
+  subject: string;
+  message: string; // HTML content
+  deliveryDate: Date; // Date when email was delivered/sent
+  actionButton?: {
+    introText: string;
+    buttonText: string;
+    url: string;
+  };
 }
 
-export const getWaitlistConfirmationTemplate = ({
+export const getBroadcastEmailTemplate = ({
   name,
-  email,
-}: WaitlistConfirmationTemplateProps): string => {
+  subject,
+  message,
+  deliveryDate,
+  actionButton,
+}: BroadcastEmailTemplateProps): string => {
+  // Format date as "December 22, 2025"
+  const formattedDate = deliveryDate.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
   return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to HyFuture Waitlist</title>
+  <title>${subject}</title>
   <link rel="preconnect" href="${EMAIL_FONTS.PRECONNECT_GOOGLE}">
   <link rel="preconnect" href="${EMAIL_FONTS.PRECONNECT_GSTATIC}" crossorigin>
   <link href="${EMAIL_FONTS.GOOGLE_FONTS_LINK}" rel="stylesheet">
@@ -34,10 +52,10 @@ export const getWaitlistConfirmationTemplate = ({
         <div style="margin-bottom: 16px;">
           <div style="display: inline-block; width: 60%; vertical-align: top;">
             <p style="margin: 0 0 4px 0; color: #2563EB; font-size: 18px; font-weight: 600;">
-              You're on the list!
+              ${subject}
             </p>
             <p style="margin: 0; color: #6B7280; font-size: 16px;">
-              Welcome to HyFuture
+              ${formattedDate}
             </p>
           </div>
           <div style="display: inline-block; width: 35%; text-align: right; vertical-align: top;">
@@ -51,25 +69,29 @@ export const getWaitlistConfirmationTemplate = ({
         <div>
           <div style="color: #374151; font-size: 16px; line-height: 1.7; word-wrap: break-word;">
             <p style="margin: 0 0 16px 0;">Hi ${name},</p>
-            <p style="margin: 0 0 16px 0;">
-              Thank you for joining the <strong>HyFuture</strong> waitlist! We're excited to have you on board.
-            </p>
-            <p style="margin: 0 0 16px 0;">
-              We're working hard to bring you an amazing experience where you can send letters to your future self, friends, and family. We'll keep you updated as we get closer to launch.
-            </p>
-            <p style="margin: 0 0 16px 0;">
-              <strong>What happens next?</strong>
-            </p>
-            <ul style="margin: 0 0 16px 0; padding-left: 20px; color: #4B5563; line-height: 1.8;">
-              <li>You'll receive updates about our progress</li>
-              <li>We'll notify you as soon as HyFuture goes live</li>
-              <li>You'll be among the first to experience the platform</li>
-            </ul>
-            <p style="margin: 0;">
-              We can't wait to share HyFuture with you! Stay tuned for exciting updates.
-            </p>
+            <div style="margin: 0 0 24px 0;">
+              ${message}
+            </div>
           </div>
         </div>
+        
+        ${
+          actionButton
+            ? `
+        <!-- Call to Action -->
+        <div style="margin-top: 24px;">
+          <div style="border: 1px solid #E2E8F0; border-radius: 8px; padding: 24px; text-align: center;">
+            <p style="margin: 0 0 16px 0; color: #475569; font-size: 17px; font-weight: 600;">
+              ${actionButton.introText}
+            </p>
+            <a href="${actionButton.url}" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #2563EB 0%, #10B981 100%); border-radius: 8px; color: #FFFFFF; text-decoration: none; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);">
+              ${actionButton.buttonText}
+            </a>
+          </div>
+        </div>
+        `
+            : ''
+        }
       </div>
 
       <!-- Footer -->

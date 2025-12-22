@@ -1,4 +1,5 @@
 import { EMAIL_COLORS } from '../constants/email-colors.constants';
+import { EMAIL_FONTS } from '../constants/email-fonts.constants';
 
 const FUTURE_ME_LOGO_URL =
   process.env.FUTURE_ME_LOGO_URL ||
@@ -26,11 +27,11 @@ export const getBaseTemplate = ({
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="${EMAIL_FONTS.PRECONNECT_GOOGLE}">
+  <link rel="preconnect" href="${EMAIL_FONTS.PRECONNECT_GSTATIC}" crossorigin>
+  <link href="${EMAIL_FONTS.GOOGLE_FONTS_LINK}" rel="stylesheet">
 </head>
-<body style="margin: 0; padding: 0; font-family: 'Merriweather', Georgia, 'Times New Roman', serif; background-color: #F5F5F5;">
+<body style="margin: 0; padding: 0; font-family: ${EMAIL_FONTS.FONT_FAMILY}; background-color: #F5F5F5;">
   <div style="width: 100%; background-color: #F5F5F5; padding: 32px 16px;">
     <div style="max-width: 600px; width: 100%; margin: 0 auto; background-color: ${EMAIL_COLORS.WHITE}; border-radius: 8px; overflow: hidden;">
       <div style="padding: 24px 24px 16px 24px;">
@@ -40,7 +41,7 @@ export const getBaseTemplate = ({
         <h2 style="margin: 0 0 12px 0; color: ${EMAIL_COLORS.TEXT_PRIMARY}; font-size: 20px; font-weight: 600; line-height: 1.4;">
           ${title}
         </h2>
-        <div style="color: ${EMAIL_COLORS.TEXT_SECONDARY}; font-size: 15px; line-height: 1.6;">
+        <div style="color: ${EMAIL_COLORS.TEXT_SECONDARY}; font-size: 16px; line-height: 1.6;">
           ${content}
         </div>
         ${

@@ -1,6 +1,19 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
+import { AuthOAuthService } from './services/auth-oauth.service';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
+import { FacebookAuthGuard } from './guards/facebook-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 import type { Request, Response } from 'express';
 import { COOKIE_CLEAR_CONFIG, COOKIE_CONFIG } from 'src/config/cookie.config';
@@ -13,10 +26,14 @@ import {
   ResetPasswordDto,
   VerifyAuthCodeDto,
 } from './dto/create-user.dto';
+import { AuthProvider } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly oauthService: AuthOAuthService,
+  ) {}
 
   @Throttle({
     default: { limit: AUTH_CONSTANTS.MAX_REGISTRATION_ATTEMPTS, ttl: 60000 },
@@ -124,5 +141,65 @@ export class AuthController {
       resetPasswordDto.confirmPassword,
       resetPasswordDto.code,
     );
+  }
+
+  // ==================== GOOGLE OAUTH ====================
+
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth() {
+    // Redirects to Google OAuth
+  }
+
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard)
+  async googleCallback(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const user = req.user as any;
+
+    // Automatically register if new user, or sign in if existing
+    const result = await this.oauthService.signInOrRegister({
+      provider: AuthProvider.GOOGLE,
+      providerId: user.providerId,
+      email: user.email,
+      name: user.name,
+      avatar: user.avatar,
+      isEmailVerified: user.isEmailVerified,
+    });
+
+    res.cookie('refreshToken', result.refreshToken, COOKIE_CONFIG);
+    return { accessToken: result.accessToken, user: result.user };
+  }
+
+  // ==================== FACEBOOK OAUTH ====================
+
+  @Get('facebook')
+  @UseGuards(AuthGuard('facebook'))
+  async facebookAuth() {
+    // Redirects to Facebook OAuth
+  }
+
+  @Get('facebook/callback')
+  @UseGuards(FacebookAuthGuard)
+  async facebookCallback(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const user = req.user as any;
+
+    // Automatically register if new user, or sign in if existing
+    const result = await this.oauthService.signInOrRegister({
+      provider: AuthProvider.FACEBOOK,
+      providerId: user.providerId,
+      email: user.email,
+      name: user.name,
+      avatar: user.avatar,
+      isEmailVerified: user.isEmailVerified,
+    });
+
+    res.cookie('refreshToken', result.refreshToken, COOKIE_CONFIG);
+    return { accessToken: result.accessToken, user: result.user };
   }
 }

@@ -27,9 +27,13 @@ export const LETTERS_MESSAGES = {
     'You cannot view this letter because the delivery date has not been reached yet',
   CANNOT_DELETE_BEFORE_DELIVERY:
     'You cannot delete this letter because the delivery date has not passed yet',
+  CANNOT_DELETE_NON_DRAFT:
+    'You can only delete draft letters. Once a letter is scheduled or delivered, it cannot be deleted.',
   UNAUTHORIZED_ACCESS: 'You are not authorized to access this letter',
   GUEST_LETTER_LIMIT_REACHED:
     'You have already sent a letter. Please sign up to send more letters.',
   CANNOT_UPDATE_SENT_LETTER:
     'You cannot update a letter that has already been sent. Only drafts can be updated.',
+  DRAFT_NOT_FOUND: 'Draft not found',
+  DRAFT_DELETED: 'Draft deleted successfully',
 } as const;

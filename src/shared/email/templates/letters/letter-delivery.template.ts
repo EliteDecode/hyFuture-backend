@@ -1,5 +1,6 @@
 import { AttachmentType } from '@prisma/client';
 import { EMAIL_COLORS } from '../../constants/email-colors.constants';
+import { EMAIL_FONTS } from '../../constants/email-fonts.constants';
 
 const FUTURE_ME_LOGO_URL =
   process.env.FUTURE_ME_LOGO_URL ||
@@ -54,11 +55,11 @@ export const getLetterDeliveryTemplate = ({
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>A Letter from the Past</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="${EMAIL_FONTS.PRECONNECT_GOOGLE}">
+  <link rel="preconnect" href="${EMAIL_FONTS.PRECONNECT_GSTATIC}" crossorigin>
+  <link href="${EMAIL_FONTS.GOOGLE_FONTS_LINK}" rel="stylesheet">
 </head>
-<body style="margin: 0; padding: 0; font-family: 'Merriweather', Georgia, 'Times New Roman', serif; background-color: #F5F5F5;">
+<body style="margin: 0; padding: 0; font-family: ${EMAIL_FONTS.FONT_FAMILY}; background-color: #F5F5F5;">
   <div style="width: 100%; background-color: #F5F5F5; padding: 0px;">
     <div style="max-width: 600px; width: 100%; margin: 0 auto; background-color: ${EMAIL_COLORS.WHITE}; overflow: hidden;">
       
@@ -74,7 +75,7 @@ export const getLetterDeliveryTemplate = ({
             </p>
           </div>
           <div style="display: inline-block; width: 35%; text-align: right; vertical-align: top;">
-            <img src="${FUTURE_ME_LOGO_URL}" alt="HyFuture logo" style="max-width: 120px; height: auto; object-fit: contain;" />
+            <img src="${FUTURE_ME_LOGO_URL}" alt="HyFuture logo" style="max-width: 110px; height: auto; object-fit: contain;" />
           </div>
         </div>
 
@@ -109,7 +110,7 @@ export const getLetterDeliveryTemplate = ({
           ${
             content
               ? `
-          <div style="color: #374151; font-size: 15px; line-height: 1.7;  word-wrap: break-word;">
+          <div style="color: #374151; font-size: 16px; line-height: 1.7;  word-wrap: break-word;">
             ${content}
           </div>
           `

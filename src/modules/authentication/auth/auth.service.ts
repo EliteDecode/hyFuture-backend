@@ -88,6 +88,16 @@ export class AuthService {
       throw new UnauthorizedException(AUTH_MESSAGES.INVALID_CREDENTIALS);
     }
 
+    // Check if user has a password (LOCAL provider users only)
+    if (!user.password) {
+      this.logger.warn(
+        `Login attempt with password for OAuth user: ${user.id} - ${user.email}`,
+      );
+      throw new UnauthorizedException(
+        'This account was created with social login. Please use the social login option.',
+      );
+    }
+
     const isPasswordValid = await compareData(
       signInDto.password,
       user.password,

@@ -55,6 +55,18 @@
     {
       "name": "Waitlist",
       "description": "Waitlist signup endpoints for early access to HyFuture"
+    },
+    {
+      "name": "Profile",
+      "description": "User profile management endpoints for authenticated users"
+    },
+    {
+      "name": "OAuth",
+      "description": "Social authentication endpoints for Google and Facebook"
+    },
+    {
+      "name": "Broadcast Email",
+      "description": "Broadcast email endpoints for sending emails to waitlist users or general users"
     }
   ],
   "components": {
@@ -364,7 +376,7 @@
       },
       "CreateLetterRequest": {
         "type": "object",
-        "required": ["content", "recipientEmail", "deliveryDate"],
+        "required": ["recipientEmail", "deliveryDate"],
         "properties": {
           "subject": {
             "type": "string",
@@ -374,10 +386,9 @@
           },
           "content": {
             "type": "string",
-            "minLength": 1,
             "maxLength": 10000,
             "example": "Dear Future Me, I hope you're doing well...",
-            "description": "Letter content (supports rich text)"
+            "description": "Optional letter content (supports rich text)"
           },
           "recipientEmail": {
             "type": "string",
@@ -402,6 +413,11 @@
               "$ref": "#/components/schemas/Attachment"
             },
             "description": "Optional media attachments (photos, videos, audio, documents)"
+          },
+          "isPublic": {
+            "type": "boolean",
+            "example": true,
+            "description": "If true, the letter will be visible on the public letters feed."
           }
         }
       },
@@ -463,6 +479,11 @@
               "$ref": "#/components/schemas/Attachment"
             },
             "description": "Replace all attachments. Provide empty array to remove all attachments."
+          },
+          "isPublic": {
+            "type": "boolean",
+            "example": true,
+            "description": "If true, the letter will be visible on the public letters feed."
           }
         }
       },
@@ -528,6 +549,11 @@
           "isGuest": {
             "type": "boolean",
             "example": false
+          },
+          "isPublic": {
+            "type": "boolean",
+            "example": true,
+            "description": "True if this letter is visible on the public letters feed."
           },
           "locked": {
             "type": "boolean",
@@ -657,6 +683,251 @@
           "statusCode": {
             "type": "integer",
             "example": 200
+          }
+        }
+      },
+      "UpdateProfileRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100,
+            "example": "Jane Doe",
+            "description": "Optional user name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "newemail@example.com",
+            "description": "Optional email address. If changed, email verification will be reset."
+          }
+        }
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "required": ["currentPassword", "newPassword", "confirmPassword"],
+        "properties": {
+          "currentPassword": {
+            "type": "string",
+            "format": "password",
+            "example": "Oldpass123!",
+            "description": "Current password"
+          },
+          "newPassword": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8,
+            "maxLength": 100,
+            "example": "Newpass123!",
+            "description": "New password"
+          },
+          "confirmPassword": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8,
+            "maxLength": 100,
+            "example": "Newpass123!",
+            "description": "Confirm new password (must match newPassword)"
+          }
+        }
+      },
+      "ProfileResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "ce285529-0508-4112-bd64-56d4156af2d6"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "isEmailVerified": {
+            "type": "boolean",
+            "example": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T10:00:00.000Z"
+          }
+        }
+      },
+      "ActionButton": {
+        "type": "object",
+        "required": ["introText", "buttonText", "url"],
+        "properties": {
+          "introText": {
+            "type": "string",
+            "example": "Want to send another letter?",
+            "description": "Text displayed above the action button"
+          },
+          "buttonText": {
+            "type": "string",
+            "example": "Send More Letters →",
+            "description": "Text displayed on the action button"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://hyfuture.app/letters/new",
+            "description": "URL the button links to"
+          }
+        }
+      },
+      "CreateBroadcastEmailRequest": {
+        "type": "object",
+        "required": ["type", "subject", "message"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["waitlist", "general"],
+            "example": "waitlist",
+            "description": "Recipient type: 'waitlist' for waitlist users, 'general' for all verified users"
+          },
+          "subject": {
+            "type": "string",
+            "maxLength": 200,
+            "example": "Exciting Update from HyFuture!",
+            "description": "Email subject line"
+          },
+          "message": {
+            "type": "string",
+            "example": "<p>Hello {{name}}, we have great news to share...</p>",
+            "description": "HTML email content. Use {{name}} for personalization."
+          },
+          "deliveryDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-12-25T10:00:00Z",
+            "description": "Optional ISO 8601 date-time for scheduled delivery. If omitted, email is sent immediately."
+          },
+          "actionButton": {
+            "$ref": "#/components/schemas/ActionButton",
+            "description": "Optional action button. If not provided, no button will be displayed in the email."
+          }
+        }
+      },
+      "BroadcastEmailResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Broadcast email scheduled successfully"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "jobId": {
+                "type": "string",
+                "example": "job-123"
+              },
+              "type": {
+                "type": "string",
+                "example": "waitlist"
+              },
+              "subject": {
+                "type": "string",
+                "example": "Exciting Update from HyFuture!"
+              },
+              "recipientCount": {
+                "type": "integer",
+                "example": 150
+              },
+              "deliveryDate": {
+                "type": "string",
+                "example": "immediate"
+              }
+            }
+          }
+        }
+      },
+      "JobStatusResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "job-123"
+          },
+          "state": {
+            "type": "string",
+            "enum": ["waiting", "active", "completed", "failed", "delayed"],
+            "example": "completed"
+          },
+          "data": {
+            "type": "object"
+          },
+          "timestamp": {
+            "type": "integer",
+            "example": 1703500800000
+          },
+          "processedOn": {
+            "type": "integer",
+            "nullable": true,
+            "example": 1703500801000
+          },
+          "finishedOn": {
+            "type": "integer",
+            "nullable": true,
+            "example": 1703500805000
+          },
+          "failedReason": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "QueueStatsResponse": {
+        "type": "object",
+        "properties": {
+          "waiting": {
+            "type": "integer",
+            "example": 0
+          },
+          "active": {
+            "type": "integer",
+            "example": 1
+          },
+          "completed": {
+            "type": "integer",
+            "example": 50
+          },
+          "failed": {
+            "type": "integer",
+            "example": 2
+          },
+          "delayed": {
+            "type": "integer",
+            "example": 5
+          },
+          "total": {
+            "type": "integer",
+            "example": 58
+          }
+        }
+      },
+      "OAuthCallbackResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserResponse"
           }
         }
       }
@@ -1909,6 +2180,514 @@
                   "statusCode": 409,
                   "message": "This email is already on the waitlist",
                   "error": "Conflict"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/letters/public/all": {
+      "get": {
+        "tags": ["Letters"],
+        "summary": "Get all public letters",
+        "description": "Retrieve all letters that have been marked as public. This endpoint is not authenticated and returns letters visible on the public feed.",
+        "operationId": "getAllPublicLetters",
+        "responses": {
+          "200": {
+            "description": "List of public letters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LetterListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/letters/public/{id}": {
+      "get": {
+        "tags": ["Letters"],
+        "summary": "Get a public letter by ID",
+        "description": "Retrieve a single public letter by its ID. This endpoint is not authenticated and only returns letters that have been marked as public.",
+        "operationId": "getPublicLetterById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "ID of the public letter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Public letter found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Letter"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Letter not found or not public",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile": {
+      "get": {
+        "tags": ["Profile"],
+        "summary": "Get Profile",
+        "description": "Retrieve the authenticated user's profile information. Password is never included in the response.",
+        "operationId": "getProfile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileResponse"
+                },
+                "example": {
+                  "id": "ce285529-0508-4112-bd64-56d4156af2d6",
+                  "name": "John Doe",
+                  "email": "user@example.com",
+                  "isEmailVerified": true,
+                  "createdAt": "2024-01-01T10:00:00.000Z",
+                  "updatedAt": "2024-01-01T10:00:00.000Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Profile"],
+        "summary": "Update Profile",
+        "description": "Update the authenticated user's profile information. Only provided fields will be updated. If email is changed, email verification will be reset.",
+        "operationId": "updateProfile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileRequest"
+              },
+              "example": {
+                "name": "Jane Doe",
+                "email": "newemail@example.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileResponse"
+                },
+                "example": {
+                  "id": "ce285529-0508-4112-bd64-56d4156af2d6",
+                  "name": "Jane Doe",
+                  "email": "newemail@example.com",
+                  "isEmailVerified": false,
+                  "createdAt": "2024-01-01T10:00:00.000Z",
+                  "updatedAt": "2024-01-01T11:00:00.000Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid email or email already taken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile/password": {
+      "patch": {
+        "tags": ["Profile"],
+        "summary": "Change Password",
+        "description": "Change the authenticated user's password. Requires current password verification.",
+        "operationId": "changePassword",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              },
+              "example": {
+                "currentPassword": "Oldpass123!",
+                "newPassword": "Newpass123!",
+                "confirmPassword": "Newpass123!"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                },
+                "example": {
+                  "message": "Password changed successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Password mismatch or new password same as current",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "message": "New password and confirm password do not match",
+                  "error": "Bad Request"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Current password is incorrect or missing/invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "message": "Current password is incorrect",
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/google/register": {
+      "get": {
+        "tags": ["OAuth"],
+        "summary": "Google OAuth Registration",
+        "description": "Initiate Google OAuth registration flow. Redirects user to Google's OAuth consent screen. After authorization, user is redirected to /auth/google/callback with state=register.",
+        "operationId": "googleRegister",
+        "responses": {
+          "302": {
+            "description": "Redirects to Google OAuth consent screen"
+          }
+        }
+      }
+    },
+    "/auth/google/login": {
+      "get": {
+        "tags": ["OAuth"],
+        "summary": "Google OAuth Login",
+        "description": "Initiate Google OAuth login flow. Redirects user to Google's OAuth consent screen. After authorization, user is redirected to /auth/google/callback with state=login.",
+        "operationId": "googleLogin",
+        "responses": {
+          "302": {
+            "description": "Redirects to Google OAuth consent screen"
+          }
+        }
+      }
+    },
+    "/auth/google/callback": {
+      "get": {
+        "tags": ["OAuth"],
+        "summary": "Google OAuth Callback",
+        "description": "Callback endpoint for Google OAuth. Handles both registration and login flows based on state parameter. Returns access token and user information. Sets refreshToken cookie.",
+        "operationId": "googleCallback",
+        "responses": {
+          "200": {
+            "description": "OAuth authentication successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthCallbackResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Email already exists (for registration) or account not found (for login)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - OAuth authentication failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/facebook/register": {
+      "get": {
+        "tags": ["OAuth"],
+        "summary": "Facebook OAuth Registration",
+        "description": "Initiate Facebook OAuth registration flow. Redirects user to Facebook's OAuth consent screen. After authorization, user is redirected to /auth/facebook/callback with state=register.",
+        "operationId": "facebookRegister",
+        "responses": {
+          "302": {
+            "description": "Redirects to Facebook OAuth consent screen"
+          }
+        }
+      }
+    },
+    "/auth/facebook/login": {
+      "get": {
+        "tags": ["OAuth"],
+        "summary": "Facebook OAuth Login",
+        "description": "Initiate Facebook OAuth login flow. Redirects user to Facebook's OAuth consent screen. After authorization, user is redirected to /auth/facebook/callback with state=login.",
+        "operationId": "facebookLogin",
+        "responses": {
+          "302": {
+            "description": "Redirects to Facebook OAuth consent screen"
+          }
+        }
+      }
+    },
+    "/auth/facebook/callback": {
+      "get": {
+        "tags": ["OAuth"],
+        "summary": "Facebook OAuth Callback",
+        "description": "Callback endpoint for Facebook OAuth. Handles both registration and login flows based on state parameter. Returns access token and user information. Sets refreshToken cookie.",
+        "operationId": "facebookCallback",
+        "responses": {
+          "200": {
+            "description": "OAuth authentication successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthCallbackResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Email already exists (for registration) or account not found (for login)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - OAuth authentication failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/broadcast-email": {
+      "post": {
+        "tags": ["Broadcast Email"],
+        "summary": "Create Broadcast Email",
+        "description": "Schedule a broadcast email to be sent to waitlist users or all verified users. Emails are personalized with recipient names. Optional action button can be included. If actionButton is not provided, no button will be displayed. Supports optional scheduled delivery.",
+        "operationId": "createBroadcastEmail",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBroadcastEmailRequest"
+              },
+              "example": {
+                "type": "waitlist",
+                "subject": "Exciting Update from HyFuture!",
+                "message": "<p>Hello {{name}}, we have great news to share...</p>",
+                "deliveryDate": "2026-12-25T10:00:00Z",
+                "actionButton": {
+                  "introText": "Ready to get started?",
+                  "buttonText": "Join HyFuture Now →",
+                  "url": "https://hyfuture.app/signup"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Broadcast email scheduled successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BroadcastEmailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid input or validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/broadcast-email/job/{jobId}": {
+      "get": {
+        "tags": ["Broadcast Email"],
+        "summary": "Get Broadcast Email Job Status",
+        "description": "Get the status of a broadcast email job by job ID. Returns job state, timestamps, and failure reason if applicable.",
+        "operationId": "getBroadcastEmailJobStatus",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Job ID returned from create broadcast email endpoint",
+            "example": "job-123"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job status retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobStatusResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Job not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/broadcast-email/queue/stats": {
+      "get": {
+        "tags": ["Broadcast Email"],
+        "summary": "Get Broadcast Email Queue Statistics",
+        "description": "Get statistics about the broadcast email queue including waiting, active, completed, failed, and delayed job counts.",
+        "operationId": "getBroadcastEmailQueueStats",
+        "responses": {
+          "200": {
+            "description": "Queue statistics retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueueStatsResponse"
                 }
               }
             }

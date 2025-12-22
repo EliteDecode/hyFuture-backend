@@ -15,6 +15,8 @@ import { UsersService } from '../authentication/users/users.service';
 import { USERS_MESSAGES } from '../authentication/users/constants/users.constants';
 import { LETTERS_MESSAGES } from './constants/letters.constants';
 
+import { LetterQueueService } from './queue/letter-queue.service';
+
 @Injectable()
 export class LettersService {
   constructor(
@@ -22,17 +24,18 @@ export class LettersService {
     private readonly logger: MyLoggerService,
     private readonly emailService: EmailService,
     private readonly usersService: UsersService,
+    private readonly letterQueueService: LetterQueueService,
   ) {}
 
   //Create Letter from DTO (Guest or Authenticated User)
   async createLetterFromDto(
     dto: CreateLetterDto | CreateGuestLetterDto,
     userId?: string,
-    sendImmediately: boolean = true,
+    sendImmediately: boolean = false,
     isDraft: boolean = false,
   ) {
     this.logger.log(
-      `Creating letter: recipient=${dto.recipientEmail}, sender=${'senderEmail' in dto ? dto.senderEmail : 'authenticated user'}, deliveryDate=${dto.deliveryDate}, isDraft=${isDraft}`,
+      `Creating letter: recipient=${dto.recipientEmail}, sender=${'senderEmail' in dto ? dto.senderEmail : 'authenticated user'}, deliveryDate=${dto.deliveryDate}, isDraft=${isDraft}, draftId=${'draftId' in dto ? dto.draftId : 'none'}`,
     );
 
     let user: User | null = null;
@@ -42,6 +45,11 @@ export class LettersService {
       if (!user) {
         throw new NotFoundException(USERS_MESSAGES.USER_NOT_FOUND);
       }
+    }
+
+    // Delete draft if draftId is provided (only for authenticated users)
+    if (!isDraft && userId && 'draftId' in dto && dto.draftId) {
+      await this.deleteDraftIfExists(dto.draftId, userId);
     }
 
     // Guest letter tracking: Check if guest has already sent any letter (track by guest email only)
@@ -65,16 +73,25 @@ export class LettersService {
 
     // Transform DTO to Prisma format
     // Note: content is stored as HTML and will be rendered as-is in emails and API responses
-    const letterData: Prisma.LetterCreateInput = {
+    const resolvedSenderEmail =
+      ('senderEmail' in dto ? dto.senderEmail : user?.email) || '';
+    const resolvedSenderName =
+      ('senderName' in dto && dto.senderName !== undefined
+        ? dto.senderName
+        : user?.name) || '';
+
+    // Use a loose-typed object to allow the new isPublic field before Prisma client is regenerated
+    const letterDataAny: any = {
       subject: dto.subject,
-      content: dto.content, // HTML content stored directly without transformation
+      content: dto.content ?? '', // HTML content stored directly without transformation
       recipientEmail: dto.recipientEmail,
       recipientName: dto.recipientName,
-      senderEmail: 'senderEmail' in dto ? dto.senderEmail : user?.email || '', // Set from authenticated user context later
-      senderName: 'senderName' in dto ? dto.senderName : user?.name || '', // Set from authenticated user context later
+      senderEmail: resolvedSenderEmail, // Set from authenticated user context later
+      senderName: resolvedSenderName, // Set from authenticated user context later
       deliveryDate: new Date(dto.deliveryDate),
       isGuest: !userId,
       status: isDraft ? LetterStatus.DRAFT : LetterStatus.SCHEDULED,
+      isPublic: dto.isPublic ?? false,
       // Connect to user if authenticated
       ...(userId && {
         user: {
@@ -92,6 +109,8 @@ export class LettersService {
           },
         }),
     };
+
+    const letterData: Prisma.LetterCreateInput = letterDataAny;
 
     // Use transaction for guest letter tracking
     const letter = await this.databaseService.$transaction(async (tx) => {
@@ -131,7 +150,16 @@ export class LettersService {
       });
     }
 
-    // Send immediately if requested (for testing purposes - keep as is)
+    // Schedule letter delivery via queue (default behavior)
+    if (!isDraft && !sendImmediately) {
+      this.logger.log(`Scheduling letter delivery via queue: ${letter.id}`);
+      await this.letterQueueService.scheduleLetterDelivery(
+        letter.id,
+        new Date(dto.deliveryDate),
+      );
+    }
+
+    // Send immediately if requested (for testing purposes or backward compatibility)
     if (sendImmediately && !isDraft) {
       this.logger.log(`Sending email immediately for letter: ${letter.id}`);
       // Format delivery date for email
@@ -244,6 +272,9 @@ export class LettersService {
             ...(updateDto.deliveryDate !== undefined && {
               deliveryDate: new Date(updateDto.deliveryDate),
             }),
+            ...(updateDto.isPublic !== undefined && {
+              isPublic: updateDto.isPublic,
+            }),
             // Create new attachments if provided
             ...(updateDto.attachments !== undefined &&
               updateDto.attachments.length > 0 && {
@@ -314,13 +345,17 @@ export class LettersService {
     this.logger.log(`Fetching letter by ID: ${id}`);
     const letter = await this.databaseService.letter.findUnique({
       where: { id },
+      include: {
+        attachments: true,
+      },
     });
     if (letter) {
       this.logger.log(`Letter found: ${id}`);
+      return this.transformLetter(letter);
     } else {
       this.logger.warn(`Letter not found: ${id}`);
+      return null;
     }
-    return letter;
   }
 
   //Get All Letters
@@ -358,7 +393,7 @@ export class LettersService {
       );
 
       return {
-        data: letters,
+        data: letters.map((l) => this.transformLetter(l)),
         pagination: {
           total,
           page,
@@ -379,7 +414,7 @@ export class LettersService {
       },
     });
     this.logger.log(`Retrieved ${letters.length} letters (no pagination)`);
-    return letters;
+    return letters.map((l) => this.transformLetter(l));
   }
 
   //Update Letter
@@ -420,39 +455,7 @@ export class LettersService {
     });
     this.logger.log(`Found ${letters.length} letters for user: ${userId}`);
 
-    // Transform letters based on delivery date (only for non-draft letters)
-    const now = new Date();
-    const transformedLetters = letters.map((letter) => {
-      // Drafts are always unlocked (user can view their own drafts)
-      if (letter.status === LetterStatus.DRAFT) {
-        return {
-          ...letter,
-          locked: false,
-        };
-      }
-
-      const deliveryDate = new Date(letter.deliveryDate);
-
-      // If delivery date hasn't been reached, return locked version
-      if (deliveryDate > now && letter.status === LetterStatus.SCHEDULED) {
-        return {
-          id: letter.id,
-          deliveryDate: letter.deliveryDate,
-          status: letter.status,
-          locked: true,
-          createdAt: letter.createdAt,
-          updatedAt: letter.updatedAt,
-        };
-      }
-
-      // If delivery date has passed or already delivered, return full letter
-      return {
-        ...letter,
-        locked: false,
-      };
-    });
-
-    return transformedLetters;
+    return letters.map((letter) => this.transformLetter(letter));
   }
 
   //Get Letters By Recipient Email
@@ -460,11 +463,55 @@ export class LettersService {
     this.logger.log(`Fetching letters for recipient: ${recipientEmail}`);
     const letters = await this.databaseService.letter.findMany({
       where: { recipientEmail },
+      include: {
+        attachments: true,
+      },
     });
     this.logger.log(
       `Found ${letters.length} letters for recipient: ${recipientEmail}`,
     );
-    return letters;
+    return letters.map((l) => this.transformLetter(l));
+  }
+
+  // Get all public letters (visible to everyone once delivered)
+  async getPublicLetters() {
+    this.logger.log('Fetching all public letters');
+    const where: any = {
+      isPublic: true,
+      status: LetterStatus.DELIVERED,
+    };
+    const letters = await this.databaseService.letter.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        attachments: true,
+      },
+    });
+    this.logger.log(`Retrieved ${letters.length} public letters`);
+    return letters.map((l) => this.transformLetter(l));
+  }
+
+  // Get single public letter by ID (no auth)
+  async getPublicLetterById(id: string) {
+    this.logger.log(`Fetching public letter by ID: ${id}`);
+    const where: any = {
+      id,
+      isPublic: true,
+      status: LetterStatus.DELIVERED,
+    };
+    const letter = await this.databaseService.letter.findFirst({
+      where,
+      include: {
+        attachments: true,
+      },
+    });
+
+    if (!letter) {
+      throw new NotFoundException(LETTERS_MESSAGES.LETTER_NOT_FOUND);
+    }
+
+    this.logger.log(`Public letter found: ${id}`);
+    return this.transformLetter(letter);
   }
 
   //Get Letters By Sender Email
@@ -472,11 +519,14 @@ export class LettersService {
     this.logger.log(`Fetching letters from sender: ${senderEmail}`);
     const letters = await this.databaseService.letter.findMany({
       where: { senderEmail },
+      include: {
+        attachments: true,
+      },
     });
     this.logger.log(
       `Found ${letters.length} letters from sender: ${senderEmail}`,
     );
-    return letters;
+    return letters.map((l) => this.transformLetter(l));
   }
 
   // Get letter by ID with delivery date check
@@ -498,19 +548,11 @@ export class LettersService {
       throw new ForbiddenException(LETTERS_MESSAGES.UNAUTHORIZED_ACCESS);
     }
 
-    // Check if delivery date has been reached
-    const now = new Date();
-    const deliveryDate = new Date(letter.deliveryDate);
-
-    if (deliveryDate > now) {
-      throw new ForbiddenException(LETTERS_MESSAGES.DELIVERY_DATE_NOT_REACHED);
-    }
-
     this.logger.log(`Letter found and accessible: ${id}`);
-    return letter;
+    return this.transformLetter(letter);
   }
 
-  // Delete letter with delivery date check
+  // Delete letter - only drafts can be deleted
   async deleteLetterWithDeliveryCheck(id: string, userId: string) {
     this.logger.log(`Attempting to delete letter: ${id}`);
     const letter = await this.databaseService.letter.findUnique({
@@ -526,18 +568,100 @@ export class LettersService {
       throw new ForbiddenException(LETTERS_MESSAGES.UNAUTHORIZED_ACCESS);
     }
 
-    // Check if delivery date has passed
-    const now = new Date();
-    const deliveryDate = new Date(letter.deliveryDate);
-
-    if (deliveryDate > now) {
-      throw new BadRequestException(
-        LETTERS_MESSAGES.CANNOT_DELETE_BEFORE_DELIVERY,
-      );
+    // Only drafts can be deleted
+    if (letter.status !== LetterStatus.DRAFT) {
+      throw new BadRequestException(LETTERS_MESSAGES.CANNOT_DELETE_NON_DRAFT);
     }
 
     await this.databaseService.letter.delete({ where: { id } });
-    this.logger.log(`Letter deleted successfully: ${id}`);
-    return { message: LETTERS_MESSAGES.LETTER_DELETED };
+    this.logger.log(`Draft letter deleted successfully: ${id}`);
+    return { message: LETTERS_MESSAGES.DRAFT_DELETED };
+  }
+
+  // Helper to delete draft if it exists and belongs to user
+  private async deleteDraftIfExists(draftId: string, userId: string) {
+    try {
+      const draft = await this.databaseService.letter.findUnique({
+        where: { id: draftId },
+      });
+
+      if (!draft) {
+        this.logger.warn(
+          `Draft ${draftId} not found when attempting to delete`,
+        );
+        return; // Don't throw - draft might have been deleted already
+      }
+
+      // Verify ownership and status
+      if (draft.userId !== userId) {
+        this.logger.warn(
+          `User ${userId} attempted to delete draft ${draftId} that doesn't belong to them`,
+        );
+        throw new ForbiddenException(LETTERS_MESSAGES.UNAUTHORIZED_ACCESS);
+      }
+
+      if (draft.status !== LetterStatus.DRAFT) {
+        this.logger.warn(
+          `Attempted to delete non-draft letter ${draftId} as draft`,
+        );
+        throw new BadRequestException(
+          'The provided ID does not refer to a draft letter',
+        );
+      }
+
+      // Delete the draft (attachments will be cascade deleted if configured)
+      await this.databaseService.letter.delete({
+        where: { id: draftId },
+      });
+
+      this.logger.log(
+        `Draft ${draftId} deleted successfully before creating final letter`,
+      );
+    } catch (error) {
+      // Re-throw known exceptions
+      if (
+        error instanceof ForbiddenException ||
+        error instanceof BadRequestException
+      ) {
+        throw error;
+      }
+      // Log other errors but don't fail letter creation
+      this.logger.error(
+        `Error deleting draft ${draftId}: ${error.message}`,
+        error,
+      );
+    }
+  }
+
+  // Helper to transform letter based on locking logic
+  private transformLetter(letter: any) {
+    if (!letter) return null;
+
+    // Drafts are always unlocked
+    if (letter.status === LetterStatus.DRAFT) {
+      return {
+        ...letter,
+        locked: false,
+      };
+    }
+
+    const now = new Date();
+    const deliveryDate = new Date(letter.deliveryDate);
+
+    // If delivery date hasn't been reached and it's scheduled, it's locked
+    if (deliveryDate > now && letter.status === LetterStatus.SCHEDULED) {
+      const { deliveryDate: _, ...rest } = letter;
+      return {
+        content: 'letter cant be viewed',
+        locked: true,
+        status: LetterStatus.SCHEDULED,
+      };
+    }
+
+    // Otherwise, it's unlocked
+    return {
+      ...letter,
+      locked: false,
+    };
   }
 }

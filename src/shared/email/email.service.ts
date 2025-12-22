@@ -6,11 +6,13 @@ import {
   getPasswordResetTemplate,
   getLetterDeliveryTemplate,
   getWaitlistConfirmationTemplate,
+  getBroadcastEmailTemplate,
   VerificationCodeTemplateProps,
   VerificationSuccessTemplateProps,
   PasswordResetTemplateProps,
   LetterDeliveryTemplateProps,
   WaitlistConfirmationTemplateProps,
+  BroadcastEmailTemplateProps,
 } from './templates';
 
 @Injectable()
@@ -103,6 +105,24 @@ export class EmailService {
     await sendMail({
       to: props.email,
       subject: emailSubject,
+      html,
+    });
+  }
+
+  async sendBroadcastEmail(
+    props: BroadcastEmailTemplateProps & { email: string; subject: string },
+  ): Promise<void> {
+    const html = getBroadcastEmailTemplate({
+      name: props.name,
+      subject: props.subject,
+      message: props.message,
+      deliveryDate: props.deliveryDate,
+      actionButton: props.actionButton,
+    });
+
+    await sendMail({
+      to: props.email,
+      subject: props.subject,
       html,
     });
   }

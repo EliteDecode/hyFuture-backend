@@ -21,7 +21,7 @@ import { LetterStatus } from '@prisma/client';
 
 @Controller('letters')
 export class LettersController {
-  constructor(private readonly lettersService: LettersService) {}
+  constructor(private readonly lettersService: LettersService) { }
 
   @Throttle({
     default: {
@@ -35,7 +35,7 @@ export class LettersController {
     const letter = await this.lettersService.createLetterFromDto(
       createLetterDto,
       undefined,
-      true,
+      false,
     );
     return letter;
   }
@@ -56,7 +56,7 @@ export class LettersController {
     const letter = await this.lettersService.createLetterFromDto(
       createLetterDto,
       user.sub,
-      true,
+      false,
     );
     return letter;
   }
@@ -73,6 +73,19 @@ export class LettersController {
       letterStatus,
     );
     return letters;
+  }
+
+  // Public endpoints (no auth) to view public letters
+  @Get('public/all')
+  async getAllPublicLetters() {
+    const letters = await this.lettersService.getPublicLetters();
+    return letters;
+  }
+
+  @Get('public/:id')
+  async getPublicLetterById(@Param('id') id: string) {
+    const letter = await this.lettersService.getPublicLetterById(id);
+    return letter;
   }
 
   @UseGuards(JwtAuthGuard)

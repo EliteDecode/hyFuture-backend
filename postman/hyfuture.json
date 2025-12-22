@@ -573,6 +573,161 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "OAuth",
+      "item": [
+        {
+          "name": "Google OAuth",
+          "item": [
+            {
+              "name": "Google Register",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/google/register",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "google", "register"]
+                },
+                "description": "Initiate Google OAuth registration. Redirects to Google's OAuth consent screen. After authorization, redirects to callback with state=register."
+              },
+              "response": []
+            },
+            {
+              "name": "Google Login",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/google/login",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "google", "login"]
+                },
+                "description": "Initiate Google OAuth login. Redirects to Google's OAuth consent screen. After authorization, redirects to callback with state=login."
+              },
+              "response": []
+            },
+            {
+              "name": "Google Callback",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/google/callback",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "google", "callback"]
+                },
+                "description": "Callback endpoint for Google OAuth. Handles both registration and login. Returns access token and user info. Sets refreshToken cookie."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Facebook OAuth",
+          "item": [
+            {
+              "name": "Facebook Register",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/facebook/register",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "facebook", "register"]
+                },
+                "description": "Initiate Facebook OAuth registration. Redirects to Facebook's OAuth consent screen. After authorization, redirects to callback with state=register."
+              },
+              "response": []
+            },
+            {
+              "name": "Facebook Login",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/facebook/login",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "facebook", "login"]
+                },
+                "description": "Initiate Facebook OAuth login. Redirects to Facebook's OAuth consent screen. After authorization, redirects to callback with state=login."
+              },
+              "response": []
+            },
+            {
+              "name": "Facebook Callback",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/facebook/callback",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["auth", "facebook", "callback"]
+                },
+                "description": "Callback endpoint for Facebook OAuth. Handles both registration and login. Returns access token and user info. Sets refreshToken cookie."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Broadcast Email",
+      "item": [
+        {
+          "name": "Create Broadcast Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"waitlist\",\n  \"subject\": \"Exciting Update from HyFuture!\",\n  \"message\": \"<p>Hello {{name}}, we have great news to share...</p>\",\n  \"deliveryDate\": \"2026-12-25T10:00:00Z\",\n  \"actionButton\": {\n    \"introText\": \"Ready to get started?\",\n    \"buttonText\": \"Join HyFuture Now →\",\n    \"url\": \"https://hyfuture.app/signup\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/broadcast-email",
+              "host": ["{{baseUrl}}"],
+              "path": ["broadcast-email"]
+            },
+            "description": "Schedule a broadcast email to waitlist users or all verified users. Emails are personalized with recipient names. Optional action button can be included. If actionButton is not provided, no button will be displayed. Supports optional scheduled delivery."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Job Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/broadcast-email/job/{{jobId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["broadcast-email", "job", "{{jobId}}"]
+            },
+            "description": "Get the status of a broadcast email job by job ID. Returns job state, timestamps, and failure reason if applicable."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Queue Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/broadcast-email/queue/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["broadcast-email", "queue", "stats"]
+            },
+            "description": "Get statistics about the broadcast email queue including waiting, active, completed, failed, and delayed job counts."
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "variable": [
@@ -615,6 +770,10 @@
     {
       "key": "notificationId",
       "value": "replace-with-notification-id"
+    },
+    {
+      "key": "jobId",
+      "value": "replace-with-job-id"
     }
   ]
 }

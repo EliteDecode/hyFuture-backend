@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { BullModule } from '@nestjs/bullmq';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MyLoggerModule } from './shared/my-logger/my-logger.module';
@@ -16,6 +17,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { LettersModule } from './modules/letters/letters.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { WaitlistModule } from './modules/waitlist/waitlist.module';
+import { ProfileModule } from './modules/profile/profile.module';
+import { BroadcastEmailModule } from './modules/broadcast-email/broadcast-email.module';
 
 @Module({
   imports: [
@@ -45,6 +48,18 @@ import { WaitlistModule } from './modules/waitlist/waitlist.module';
     LettersModule,
     NotificationsModule,
     WaitlistModule,
+    BroadcastEmailModule,
+    BullModule.forRootAsync({
+      useFactory: () => ({
+        connection: {
+          host: process.env.REDIS_HOST || 'localhost',
+          port: parseInt(process.env.REDIS_PORT || '6379'),
+          username: process.env.REDIS_USERNAME || 'default',
+          password: process.env.REDIS_PASSWORD,
+        },
+      }),
+    }),
+    ProfileModule,
   ],
   controllers: [AppController, UsersController],
   providers: [

@@ -1,10 +1,11 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { AuthProvider, Prisma, User } from '@prisma/client';
 import { compareData } from 'src/common/utils/hash.util';
 import { DatabaseService } from 'src/shared/database/database.service';
 import { MyLoggerService } from 'src/shared/my-logger/my-logger.service';
@@ -49,6 +50,66 @@ export class UsersService {
     return user;
   }
 
+  async findUserByProvider(
+    provider: AuthProvider,
+    providerId: string,
+  ): Promise<User | null> {
+    const user = await this.databaseService.user.findUnique({
+      where: {
+        provider_providerId: {
+          provider,
+          providerId,
+        },
+      },
+    });
+    return user;
+  }
+
+  async createOAuthUser(data: {
+    email: string;
+    name?: string;
+    provider: AuthProvider;
+    providerId: string;
+    avatar?: string;
+  }): Promise<User> {
+    // Check if email already exists (email must be unique across all providers)
+    const existingUser = await this.findUserByEmail(data.email);
+    if (existingUser) {
+      throw new ConflictException(
+        'An account with this email already exists. Please sign in instead.',
+      );
+    }
+
+    // Check if provider account already exists
+    const existingProviderUser = await this.findUserByProvider(
+      data.provider,
+      data.providerId,
+    );
+    if (existingProviderUser) {
+      throw new ConflictException(
+        'This account is already registered. Please sign in instead.',
+      );
+    }
+
+    const user = await this.databaseService.user.create({
+      data: {
+        email: data.email,
+        name: data.name || null,
+        provider: data.provider,
+        providerId: data.providerId,
+        avatar: data.avatar || null,
+        password: null, // OAuth users don't have passwords
+        isEmailVerified: true, // OAuth emails are auto-verified
+      },
+    });
+
+    this.logger.log(
+      `OAuth user created: ${user.id} - ${user.email} via ${data.provider}`,
+    );
+
+    return user;
+  }
+
 
 
   async findUserById(id: string): Promise<User | null> {
@@ -60,9 +121,9 @@ export class UsersService {
 
   async deleteAccount(
     userId: string,
-    password: string,
+    password?: string,
   ): Promise<{ message: string }> {
-    // Find user with password
+    // Find user
     const user = await this.databaseService.user.findUnique({
       where: { id: userId },
     });
@@ -71,14 +132,23 @@ export class UsersService {
       throw new NotFoundException(USERS_MESSAGES.USER_NOT_FOUND);
     }
 
-    // Verify password
-    const isPasswordValid = await compareData(password, user.password);
-    if (!isPasswordValid) {
-      this.logger.warn(
-        `Invalid password attempt for account deletion: ${userId}`,
-      );
-      throw new UnauthorizedException(USERS_MESSAGES.INVALID_PASSWORD);
+    // Verify password only for LOCAL provider users
+    if (user.provider === AuthProvider.LOCAL) {
+      if (!password) {
+        throw new BadRequestException('Password is required for account deletion');
+      }
+      if (!user.password) {
+        throw new BadRequestException('Invalid account configuration');
+      }
+      const isPasswordValid = await compareData(password, user.password);
+      if (!isPasswordValid) {
+        this.logger.warn(
+          `Invalid password attempt for account deletion: ${userId}`,
+        );
+        throw new UnauthorizedException(USERS_MESSAGES.INVALID_PASSWORD);
+      }
     }
+    // OAuth users don't need password verification
 
 
     // Delete everything in transaction
