@@ -209,11 +209,30 @@ export class AuthOAuthService {
           );
         }
 
-        // Generate tokens
-        const tokens = await this.tokensService.generateToken({
+        // Generate tokens (without saving - we'll save in transaction)
+        const tokens = await this.tokensService.generateTokensOnly({
           userId: currentUser.id,
           email: currentUser.email,
         });
+
+        // Save token within transaction using transaction client
+        const existingToken = await tx.token.findFirst({
+          where: { userId: currentUser.id },
+        });
+
+        if (existingToken) {
+          await tx.token.update({
+            where: { id: existingToken.id },
+            data: { refreshToken: tokens.refreshToken },
+          });
+        } else {
+          await tx.token.create({
+            data: {
+              userId: currentUser.id,
+              refreshToken: tokens.refreshToken,
+            },
+          });
+        }
 
         return tokens;
       });
@@ -286,11 +305,30 @@ export class AuthOAuthService {
         );
       }
 
-      // Generate tokens
-      const tokens = await this.tokensService.generateToken({
+      // Generate tokens (without saving - we'll save in transaction)
+      const tokens = await this.tokensService.generateTokensOnly({
         userId: newUser.id,
         email: newUser.email,
       });
+
+      // Save token within transaction using transaction client
+      const existingToken = await tx.token.findFirst({
+        where: { userId: newUser.id },
+      });
+
+      if (existingToken) {
+        await tx.token.update({
+          where: { id: existingToken.id },
+          data: { refreshToken: tokens.refreshToken },
+        });
+      } else {
+        await tx.token.create({
+          data: {
+            userId: newUser.id,
+            refreshToken: tokens.refreshToken,
+          },
+        });
+      }
 
       return { user: newUser, tokens };
     });
