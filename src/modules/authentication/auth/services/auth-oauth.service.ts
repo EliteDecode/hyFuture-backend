@@ -7,6 +7,7 @@ import {
 import { AuthProvider } from '@prisma/client';
 import { UsersService } from 'src/modules/authentication/users/users.service';
 import { TokensService } from 'src/modules/authentication/tokens/tokens.service';
+import { DatabaseService } from 'src/shared/database/database.service';
 import { MyLoggerService } from 'src/shared/my-logger/my-logger.service';
 import { AUTH_MESSAGES } from '../constants/auth.constants';
 
@@ -26,6 +27,7 @@ export class AuthOAuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly tokensService: TokensService,
+    private readonly databaseService: DatabaseService,
   ) {}
 
   /**
@@ -174,33 +176,62 @@ export class AuthOAuthService {
         throw new UnauthorizedException(AUTH_MESSAGES.INVALID_CREDENTIALS);
       }
 
-      // Auto-verify OAuth users if not already verified
-      if (!user.isEmailVerified) {
-        await this.usersService.updateUser({
-          id: user.id,
-          isEmailVerified: true,
-        });
-        user.isEmailVerified = true;
-      }
+      // Store user reference to avoid null check issues in transaction
+      const currentUser = user;
 
-      // Generate tokens
-      const tokens = await this.tokensService.generateToken({
-        userId: user.id,
-        email: user.email,
+      // Use transaction to ensure atomicity
+      const result = await this.databaseService.$transaction(async (tx) => {
+        // Auto-verify OAuth users if not already verified
+        if (!currentUser.isEmailVerified) {
+          await tx.user.update({
+            where: { id: currentUser.id },
+            data: { isEmailVerified: true },
+          });
+          currentUser.isEmailVerified = true;
+        }
+
+        // Link guest letters to user account
+        // Find all letters sent from this email that don't have a userId yet
+        const linkedLetters = await tx.letter.updateMany({
+          where: {
+            senderEmail: currentUser.email,
+            userId: null,
+          },
+          data: {
+            userId: currentUser.id,
+            isGuest: false,
+          },
+        });
+
+        if (linkedLetters.count > 0) {
+          this.logger.log(
+            `Linked ${linkedLetters.count} guest letter(s) to user account: ${currentUser.id}`,
+          );
+        }
+
+        // Generate tokens
+        const tokens = await this.tokensService.generateToken({
+          userId: currentUser.id,
+          email: currentUser.email,
+        });
+
+        return tokens;
       });
 
-      this.logger.log(`OAuth user signed in: ${user.id} - ${user.email}`);
+      this.logger.log(
+        `OAuth user signed in: ${currentUser.id} - ${currentUser.email}`,
+      );
 
       return {
         user: {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          avatar: user.avatar,
-          provider: user.provider,
-          isEmailVerified: user.isEmailVerified,
+          id: currentUser.id,
+          email: currentUser.email,
+          name: currentUser.name,
+          avatar: currentUser.avatar,
+          provider: currentUser.provider,
+          isEmailVerified: currentUser.isEmailVerified,
         },
-        ...tokens,
+        ...result,
       };
     }
 
@@ -221,32 +252,63 @@ export class AuthOAuthService {
       `Auto-registering new OAuth user: ${userData.email} via ${userData.provider}`,
     );
 
-    user = await this.usersService.createOAuthUser({
-      email: userData.email,
-      name: userData.name,
-      provider: userData.provider,
-      providerId: userData.providerId,
-      avatar: userData.avatar,
+    // Use transaction to ensure atomicity
+    const result = await this.databaseService.$transaction(async (tx) => {
+      // Create new user directly in transaction
+      const newUser = await tx.user.create({
+        data: {
+          email: userData.email,
+          name: userData.name || null,
+          provider: userData.provider,
+          providerId: userData.providerId,
+          avatar: userData.avatar || null,
+          password: null, // OAuth users don't have passwords
+          isEmailVerified: true, // OAuth emails are auto-verified
+        },
+      });
+
+      // Link guest letters to user account
+      // Find all letters sent from this email that don't have a userId yet
+      const linkedLetters = await tx.letter.updateMany({
+        where: {
+          senderEmail: newUser.email,
+          userId: null,
+        },
+        data: {
+          userId: newUser.id,
+          isGuest: false,
+        },
+      });
+
+      if (linkedLetters.count > 0) {
+        this.logger.log(
+          `Linked ${linkedLetters.count} guest letter(s) to user account: ${newUser.id}`,
+        );
+      }
+
+      // Generate tokens
+      const tokens = await this.tokensService.generateToken({
+        userId: newUser.id,
+        email: newUser.email,
+      });
+
+      return { user: newUser, tokens };
     });
 
-    // Generate tokens
-    const tokens = await this.tokensService.generateToken({
-      userId: user.id,
-      email: user.email,
-    });
-
-    this.logger.log(`OAuth user auto-registered: ${user.id} - ${user.email}`);
+    this.logger.log(
+      `OAuth user auto-registered: ${result.user.id} - ${result.user.email}`,
+    );
 
     return {
       user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        avatar: user.avatar,
-        provider: user.provider,
-        isEmailVerified: user.isEmailVerified,
+        id: result.user.id,
+        email: result.user.email,
+        name: result.user.name,
+        avatar: result.user.avatar,
+        provider: result.user.provider,
+        isEmailVerified: result.user.isEmailVerified,
       },
-      ...tokens,
+      ...result.tokens,
     };
   }
 }
