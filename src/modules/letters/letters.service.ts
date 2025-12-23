@@ -88,7 +88,17 @@ export class LettersService {
       recipientName: dto.recipientName,
       senderEmail: resolvedSenderEmail, // Set from authenticated user context later
       senderName: resolvedSenderName, // Set from authenticated user context later
-      deliveryDate: new Date(dto.deliveryDate),
+      deliveryDate: (() => {
+        // Parse and validate delivery date
+        const parsedDate = new Date(dto.deliveryDate);
+        if (isNaN(parsedDate.getTime())) {
+          throw new BadRequestException(
+            'Invalid delivery date format. Please use ISO 8601 format (e.g., 2026-12-25T10:00:00Z)',
+          );
+        }
+        // Ensure date is normalized (Date objects are stored as UTC in database)
+        return parsedDate;
+      })(),
       isGuest: !userId,
       status: isDraft ? LetterStatus.DRAFT : LetterStatus.SCHEDULED,
       isPublic: dto.isPublic ?? false,

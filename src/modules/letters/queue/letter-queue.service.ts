@@ -17,13 +17,25 @@ export class LetterQueueService {
         letterId: string,
         deliveryDate: Date,
     ): Promise<string> {
+        // Normalize dates to UTC to ensure consistent timezone handling
         const now = new Date();
-        const delay = deliveryDate.getTime() - now.getTime();
+        const nowUTC = new Date(now.toISOString());
+        const deliveryDateUTC = new Date(deliveryDate.toISOString());
+        
+        // Calculate delay in milliseconds (both dates are in UTC)
+        const delay = deliveryDateUTC.getTime() - nowUTC.getTime();
+
+        // Convert delay to human-readable format for logging
+        const delayHours = Math.floor(delay / (1000 * 60 * 60));
+        const delayMinutes = Math.floor((delay % (1000 * 60 * 60)) / (1000 * 60));
 
         // If delivery date is in the past or very close (within 1 minute), deliver immediately
         if (delay <= 60000) {
             this.logger.log(
                 `Delivery date is in the past or very close for letter ${letterId}. Scheduling for immediate delivery.`,
+            );
+            this.logger.log(
+                `Current time: ${nowUTC.toISOString()}, Delivery time: ${deliveryDateUTC.toISOString()}, Delay: ${delay}ms`,
             );
             const job = await this.letterQueue.add(
                 'deliver-letter',
@@ -41,7 +53,10 @@ export class LetterQueueService {
 
         // Schedule for future delivery
         this.logger.log(
-            `Scheduling letter ${letterId} for delivery at ${deliveryDate.toISOString()} (delay: ${delay}ms)`,
+            `Scheduling letter ${letterId} for delivery at ${deliveryDateUTC.toISOString()} (UTC)`,
+        );
+        this.logger.log(
+            `Current time: ${nowUTC.toISOString()} (UTC), Delay: ${delayHours}h ${delayMinutes}m (${delay}ms)`,
         );
 
         const job = await this.letterQueue.add(
@@ -58,7 +73,7 @@ export class LetterQueueService {
         );
 
         this.logger.log(
-            `Letter ${letterId} scheduled successfully. Job ID: ${job.id}`,
+            `Letter ${letterId} scheduled successfully. Job ID: ${job.id}, Will deliver at: ${deliveryDateUTC.toISOString()}`,
         );
         return job.id || '';
     }
