@@ -358,7 +358,7 @@ export function getLandingPage(): string {
     </div>
     
     <div class="footer">
-      <p>© 2024 Future Me App. Your words, their future.</p>
+      <p>© ${new Date().getFullYear()} HyFuture.</p>
       <div class="version-badge">API Version 1.0.0</div>
     </div>
   </div>
@@ -366,4 +366,3 @@ export function getLandingPage(): string {
 </html>
   `.trim();
 }
-

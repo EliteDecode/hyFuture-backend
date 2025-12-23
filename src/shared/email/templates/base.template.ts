@@ -18,7 +18,7 @@ export const getBaseTemplate = ({
   content,
   buttonText,
   buttonLink,
-  footerText = '© 2024 HyFuture. Your words, their future.',
+  footerText = `© ${new Date().getFullYear()} HyFuture`,
 }: BaseTemplateProps): string => {
   return `
 <!DOCTYPE html>
