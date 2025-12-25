@@ -10,7 +10,12 @@ export interface LetterDeliveryJobData {
     letterId: string;
 }
 
-@Processor('letter-delivery')
+@Processor('letter-delivery', {
+    limiter: {
+        max: 1,
+        duration: 1000,
+    },
+})
 @Injectable()
 export class LetterQueueProcessor extends WorkerHost {
     constructor(

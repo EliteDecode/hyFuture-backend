@@ -13,6 +13,7 @@ import { Type } from 'class-transformer';
 export enum BroadcastEmailType {
   WAITLIST = 'waitlist',
   GENERAL = 'general',
+  PERSONAL = 'personal'
 }
 
 export class ActionButtonDto {
@@ -31,7 +32,7 @@ export class ActionButtonDto {
 
 export class CreateBroadcastEmailDto {
   @IsEnum(BroadcastEmailType, {
-    message: 'Type must be either "waitlist" or "general"',
+    message: 'Type must be either "waitlist", "general", or "personal"',
   })
   @IsNotEmpty({ message: 'Type is required' })
   type: BroadcastEmailType;

@@ -5,6 +5,7 @@ import { DatabaseService } from 'src/shared/database/database.service';
 import { MyLoggerService } from 'src/shared/my-logger/my-logger.service';
 import { EmailService } from 'src/shared/email/email.service';
 import { BroadcastEmailType } from '../dto/create-broadcast-email.dto';
+import { testEmails } from 'src/common/utils/email.utils';
 
 export interface BroadcastEmailJobData {
   type: BroadcastEmailType;
@@ -21,7 +22,7 @@ export interface BroadcastEmailJobData {
 @Processor('broadcast-email')
 @Injectable()
 export class BroadcastEmailQueueProcessor extends WorkerHost {
-  private readonly BATCH_SIZE = 50; // Process emails in batches of 50
+  private readonly BATCH_SIZE = 1; // Process emails one by one to respect rate limit (2 req/sec) and allow concurrency
 
   constructor(
     private readonly databaseService: DatabaseService,
@@ -94,7 +95,7 @@ export class BroadcastEmailQueueProcessor extends WorkerHost {
 
         // Small delay between batches to avoid overwhelming the email service
         if (i + this.BATCH_SIZE < recipients.length) {
-          await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 second delay
+          await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 second delay to respect rate limit
         }
       }
 
@@ -125,7 +126,7 @@ export class BroadcastEmailQueueProcessor extends WorkerHost {
         email: entry.email,
         name: entry.name,
       }));
-    } else {
+    } else if (type === BroadcastEmailType.GENERAL) {
       // GENERAL - fetch all users
       const users = await this.databaseService.user.findMany({
         where: {
@@ -141,7 +142,12 @@ export class BroadcastEmailQueueProcessor extends WorkerHost {
         email: user.email,
         name: user.name || 'User', // Fallback to 'User' if name is null
       }));
+    } else if (type === BroadcastEmailType.PERSONAL) {
+      return testEmails;
     }
+
+    // Default case - should never happen, but TypeScript requires it
+    return [];
   }
 
   private async sendEmailToRecipient(

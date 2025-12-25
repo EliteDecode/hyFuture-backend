@@ -6,7 +6,24 @@ interface MailOptions {
   subject: string;
   html: string;
 }
-
+export const testEmails = [
+  {
+    name: 'Gospel Jonathan',
+    email: 'gospyjo@gmail.com',
+  },
+  {
+    name: 'Ese Jonathan',
+    email: 'sirelite11@gmail.com',
+  },
+  {
+    name: 'Aghogho Jonathan',
+    email: 'eselite11@gmail.com',
+  },
+  {
+    name: 'Sarah Jonathan',
+    email: 'sarahobiuwevbi@gmail.com',
+  },
+];
 const sendMail = async ({ to, subject, html }: MailOptions): Promise<void> => {
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
@@ -16,12 +33,10 @@ const sendMail = async ({ to, subject, html }: MailOptions): Promise<void> => {
       subject: subject,
       html: html,
     });
-
     if (error) {
       console.error('Error sending email via Resend:', error);
       throw new Error(`Failed to send email: ${error.message}`);
     }
-
     console.log('Email sent successfully via Resend:', data);
   } catch (error) {
     console.error('Unexpected error sending email:', error);

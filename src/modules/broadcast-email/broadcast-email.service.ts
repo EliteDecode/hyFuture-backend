@@ -6,6 +6,7 @@ import {
   BroadcastEmailType,
 } from './dto/create-broadcast-email.dto';
 import { DatabaseService } from 'src/shared/database/database.service';
+import { testEmails } from 'src/common/utils/email.utils';
 
 @Injectable()
 export class BroadcastEmailService {
@@ -14,7 +15,7 @@ export class BroadcastEmailService {
   constructor(
     private readonly queueService: BroadcastEmailQueueService,
     private readonly databaseService: DatabaseService,
-  ) {}
+  ) { }
 
   async createBroadcastEmail(dto: CreateBroadcastEmailDto) {
     this.logger.log(
@@ -64,12 +65,14 @@ export class BroadcastEmailService {
   private async getRecipientCount(type: BroadcastEmailType): Promise<number> {
     if (type === BroadcastEmailType.WAITLIST) {
       return this.databaseService.waitlist.count();
-    } else {
+    } else if (type === BroadcastEmailType.GENERAL) {
       return this.databaseService.user.count({
         where: {
           isEmailVerified: true,
         },
       });
+    } else {
+      return testEmails.length
     }
   }
 }
