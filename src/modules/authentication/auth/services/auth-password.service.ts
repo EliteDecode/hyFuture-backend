@@ -51,10 +51,9 @@ export class AuthPasswordService {
 
     // Save/update auth code (allows overwriting existing codes)
     await this.tokensService.saveOrUpdateAuthCode(user.id, resetCode);
-
     // Send password reset email with link containing code
     try {
-      const resetLink = `${process.env.FRONTEND_URL || 'https://app.ifeto.com'}/reset-password?code=${resetCode}&email=${encodeURIComponent(sanitizedEmail)}`;
+      const resetLink = `${process.env.FRONTEND_URL}/reset-password?code=${resetCode}&email=${encodeURIComponent(sanitizedEmail)}`;
       await this.emailService.sendPasswordReset({
         email: sanitizedEmail,
         firstName: user.name || 'User',

@@ -25,7 +25,7 @@ export class LettersService {
     private readonly emailService: EmailService,
     private readonly usersService: UsersService,
     private readonly letterQueueService: LetterQueueService,
-  ) {}
+  ) { }
 
   //Create Letter from DTO (Guest or Authenticated User)
   async createLetterFromDto(
@@ -96,6 +96,18 @@ export class LettersService {
             'Invalid delivery date format. Please use ISO 8601 format (e.g., 2026-12-25T10:00:00Z)',
           );
         }
+
+        // If the date string doesn't contain time (e.g. "2025-12-26"), inherit the current time
+        // This ensures "Send at 10am -> Receive at 10am" behavior for date-only selections
+        if (!dto.deliveryDate.includes('T')) {
+          const now = new Date();
+          parsedDate.setUTCHours(
+            now.getUTCHours(),
+            now.getUTCMinutes(),
+            now.getUTCSeconds()
+          );
+        }
+
         // Ensure date is normalized (Date objects are stored as UTC in database)
         return parsedDate;
       })(),
@@ -111,13 +123,13 @@ export class LettersService {
       // Create attachments if provided
       ...(dto.attachments &&
         dto.attachments.length > 0 && {
-          attachments: {
-            create: dto.attachments.map((attachment) => ({
-              fileUrl: attachment.fileUrl,
-              type: attachment.type,
-            })),
-          },
-        }),
+        attachments: {
+          create: dto.attachments.map((attachment) => ({
+            fileUrl: attachment.fileUrl,
+            type: attachment.type,
+          })),
+        },
+      }),
     };
 
     const letterData: Prisma.LetterCreateInput = letterDataAny;
@@ -165,10 +177,9 @@ export class LettersService {
       this.logger.log(`Scheduling letter delivery via queue: ${letter.id}`);
       await this.letterQueueService.scheduleLetterDelivery(
         letter.id,
-        new Date(dto.deliveryDate),
+        letter.deliveryDate,
       );
     }
-
     // Send immediately if requested (for testing purposes or backward compatibility)
     if (sendImmediately && !isDraft) {
       this.logger.log(`Sending email immediately for letter: ${letter.id}`);
@@ -180,7 +191,6 @@ export class LettersService {
         month: 'long',
         day: 'numeric',
       });
-
       try {
         await this.emailService.sendLetterDelivery({
           email: dto.recipientEmail,
@@ -280,7 +290,19 @@ export class LettersService {
               recipientName: updateDto.recipientName,
             }),
             ...(updateDto.deliveryDate !== undefined && {
-              deliveryDate: new Date(updateDto.deliveryDate),
+              deliveryDate: (() => {
+                const d = new Date(updateDto.deliveryDate);
+                // If date-only string, inherit current time
+                if (!updateDto.deliveryDate.includes('T')) {
+                  const now = new Date();
+                  d.setUTCHours(
+                    now.getUTCHours(),
+                    now.getUTCMinutes(),
+                    now.getUTCSeconds()
+                  );
+                }
+                return d;
+              })(),
             }),
             ...(updateDto.isPublic !== undefined && {
               isPublic: updateDto.isPublic,
@@ -288,13 +310,13 @@ export class LettersService {
             // Create new attachments if provided
             ...(updateDto.attachments !== undefined &&
               updateDto.attachments.length > 0 && {
-                attachments: {
-                  create: updateDto.attachments.map((attachment) => ({
-                    fileUrl: attachment.fileUrl,
-                    type: attachment.type,
-                  })),
-                },
-              }),
+              attachments: {
+                create: updateDto.attachments.map((attachment) => ({
+                  fileUrl: attachment.fileUrl,
+                  type: attachment.type,
+                })),
+              },
+            }),
           },
           include: {
             attachments: true,
