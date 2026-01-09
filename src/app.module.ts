@@ -19,6 +19,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { WaitlistModule } from './modules/waitlist/waitlist.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { BroadcastEmailModule } from './modules/broadcast-email/broadcast-email.module';
+import { AdminAuthModule } from './modules/authentication/admin-auth/admin-auth.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { BroadcastEmailModule } from './modules/broadcast-email/broadcast-email.
     NotificationsModule,
     WaitlistModule,
     BroadcastEmailModule,
+    AdminAuthModule,
     BullModule.forRootAsync({
       useFactory: () => ({
         connection: {

@@ -25,8 +25,8 @@ model User {
 
   // OAuth fields
   provider   AuthProvider @default(LOCAL)
-  providerId String?      // OAuth provider's user ID
-  avatar     String?      // Profile picture from OAuth provider
+  providerId String? // OAuth provider's user ID
+  avatar     String? // Profile picture from OAuth provider
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -128,6 +128,7 @@ model Attachment {
   @@index([letterId])
   @@map("attachments")
 }
+
 // ==================== NOTIFICATIONS ====================
 
 enum NotificationType {

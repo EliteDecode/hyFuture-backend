@@ -29,8 +29,13 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/auth/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "register"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
                 },
                 "description": "Create a new Future Me user account. Email must be unique; password requires ≥8 characters. A verification code will be sent to the email. Guest letters sent from this email will be automatically linked."
               },
@@ -52,8 +57,13 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/auth/verify-auth-code",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "verify-auth-code"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "verify-auth-code"
+                  ]
                 },
                 "description": "Complete email verification using the 6-digit code sent to the user's email. Returns access and refresh tokens. Guest letters sent from this email will be automatically linked to the account."
               },
@@ -80,8 +90,13 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/auth/login",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "login"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
                 },
                 "description": "Authenticate a verified user. Returns an access token in the response body and sets a secure httpOnly refreshToken cookie."
               },
@@ -99,8 +114,13 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/auth/renew-tokens",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "renew-tokens"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "renew-tokens"
+                  ]
                 },
                 "description": "Renew tokens using the refreshToken httpOnly cookie sent with the request. No request body is required; a new access token is returned and the refresh cookie is rotated."
               },
@@ -113,8 +133,13 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/auth/logout",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "logout"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
                 },
                 "description": "Logs out the user by revoking the current refresh token and clearing the refreshToken httpOnly cookie."
               },
@@ -141,8 +166,13 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/auth/forgot-password",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "forgot-password"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "forgot-password"
+                  ]
                 },
                 "description": "Trigger a password reset email/code for the user account."
               },
@@ -164,8 +194,13 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/auth/reset-password",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "reset-password"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "reset-password"
+                  ]
                 },
                 "description": "Confirm the reset code and set a new password."
               },
@@ -192,8 +227,13 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/auth/resend-verification-code",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "resend-verification-code"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "resend-verification-code"
+                  ]
                 },
                 "description": "Resends the email verification auth code for unverified users."
               },
@@ -215,8 +255,13 @@
                 },
                 "url": {
                   "raw": "{{baseUrl}}/auth/resend-password-code",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "resend-password-code"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "resend-password-code"
+                  ]
                 },
                 "description": "Triggers another password-reset auth code using the same flow as forgot password."
               },
@@ -236,8 +281,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/countries?region=AFRICA",
-              "host": ["{{baseUrl}}"],
-              "path": ["countries"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "countries"
+              ],
               "query": [
                 {
                   "key": "region",
@@ -258,8 +307,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/countries/NG",
-              "host": ["{{baseUrl}}"],
-              "path": ["countries", "NG"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "countries",
+                "NG"
+              ]
             },
             "description": "Get a specific country by its ISO code (e.g., NG for Nigeria, US for United States)."
           },
@@ -272,8 +326,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/countries/my-country",
-              "host": ["{{baseUrl}}"],
-              "path": ["countries", "my-country"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "countries",
+                "my-country"
+              ]
             },
             "description": "Determine the caller's country based on their IP address using an external IP geolocation service."
           },
@@ -300,8 +359,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/letters/guest",
-              "host": ["{{baseUrl}}"],
-              "path": ["letters", "guest"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "letters",
+                "guest"
+              ]
             },
             "description": "Create a letter as a guest user. Guests can send only 1 letter per recipient email. Rate limited to 10 requests per hour."
           },
@@ -328,8 +392,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/letters",
-              "host": ["{{baseUrl}}"],
-              "path": ["letters"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "letters"
+              ]
             },
             "description": "Create a letter as an authenticated user. Rate limited to 20 requests per hour. Requires JWT authentication."
           },
@@ -348,8 +416,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/letters?status=SCHEDULED",
-              "host": ["{{baseUrl}}"],
-              "path": ["letters"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "letters"
+              ],
               "query": [
                 {
                   "key": "status",
@@ -376,8 +448,13 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/letters/{{letterId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["letters", "{{letterId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "letters",
+                "{{letterId}}"
+              ]
             },
             "description": "Get a specific letter by ID. Only accessible if the delivery date has been reached. Returns 403 if delivery date hasn't been reached yet."
           },
@@ -404,8 +481,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/letters/draft",
-              "host": ["{{baseUrl}}"],
-              "path": ["letters", "draft"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "letters",
+                "draft"
+              ]
             },
             "description": "Create a letter as a draft. Drafts can be updated later before sending. Drafts are always visible to the user (not locked)."
           },
@@ -432,8 +514,13 @@
             },
             "url": {
               "raw": "{{baseUrl}}/letters/{{letterId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["letters", "{{letterId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "letters",
+                "{{letterId}}"
+              ]
             },
             "description": "Update a draft letter. Only letters with DRAFT status can be updated. Sent letters cannot be modified. Attachments are replaced if provided."
           },
@@ -452,8 +539,13 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/letters/{{letterId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["letters", "{{letterId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "letters",
+                "{{letterId}}"
+              ]
             },
             "description": "Delete a letter. Only letters with delivery dates that have passed can be deleted. Returns 400 if delivery date hasn't passed yet."
           },
@@ -477,8 +569,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/notifications",
-              "host": ["{{baseUrl}}"],
-              "path": ["notifications"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications"
+              ]
             },
             "description": "Get all notifications for the authenticated user, ordered by creation date (newest first)."
           },
@@ -497,8 +593,13 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/notifications/unread-count",
-              "host": ["{{baseUrl}}"],
-              "path": ["notifications", "unread-count"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications",
+                "unread-count"
+              ]
             },
             "description": "Get the count of unread notifications for the authenticated user."
           },
@@ -517,8 +618,14 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/notifications/{{notificationId}}/read",
-              "host": ["{{baseUrl}}"],
-              "path": ["notifications", "{{notificationId}}", "read"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications",
+                "{{notificationId}}",
+                "read"
+              ]
             },
             "description": "Mark a specific notification as read."
           },
@@ -537,8 +644,13 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/notifications/read-all",
-              "host": ["{{baseUrl}}"],
-              "path": ["notifications", "read-all"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications",
+                "read-all"
+              ]
             },
             "description": "Mark all notifications for the authenticated user as read."
           },
@@ -565,10 +677,141 @@
             },
             "url": {
               "raw": "{{baseUrl}}/waitlist",
-              "host": ["{{baseUrl}}"],
-              "path": ["waitlist"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "waitlist"
+              ]
             },
             "description": "Add your email and name to the HyFuture waitlist. You'll receive a confirmation email and be notified when HyFuture goes live."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "profile"
+              ]
+            },
+            "description": "Get the profile of the authenticated user."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\",\n  \"avatar\": \"https://example.com/avatar.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "profile"
+              ]
+            },
+            "description": "Update the profile of the authenticated user."
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"OldPassword123!\",\n  \"newPassword\": \"NewPassword123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/profile/password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "profile",
+                "password"
+              ]
+            },
+            "description": "Change the password of the authenticated user."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Account",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"YourPassword123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/account",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "account"
+              ]
+            },
+            "description": "Permanently delete the authenticated user's account. Requires password verification for LOCAL provider users."
           },
           "response": []
         }
@@ -587,8 +830,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/auth/google/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "google", "register"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "google",
+                    "register"
+                  ]
                 },
                 "description": "Initiate Google OAuth registration. Redirects to Google's OAuth consent screen. After authorization, redirects to callback with state=register."
               },
@@ -601,8 +850,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/auth/google/login",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "google", "login"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "google",
+                    "login"
+                  ]
                 },
                 "description": "Initiate Google OAuth login. Redirects to Google's OAuth consent screen. After authorization, redirects to callback with state=login."
               },
@@ -615,8 +870,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/auth/google/callback",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "google", "callback"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "google",
+                    "callback"
+                  ]
                 },
                 "description": "Callback endpoint for Google OAuth. Handles both registration and login. Returns access token and user info. Sets refreshToken cookie."
               },
@@ -634,8 +895,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/auth/facebook/register",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "facebook", "register"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "facebook",
+                    "register"
+                  ]
                 },
                 "description": "Initiate Facebook OAuth registration. Redirects to Facebook's OAuth consent screen. After authorization, redirects to callback with state=register."
               },
@@ -648,8 +915,14 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/auth/facebook/login",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "facebook", "login"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "facebook",
+                    "login"
+                  ]
                 },
                 "description": "Initiate Facebook OAuth login. Redirects to Facebook's OAuth consent screen. After authorization, redirects to callback with state=login."
               },
@@ -662,14 +935,271 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/auth/facebook/callback",
-                  "host": ["{{baseUrl}}"],
-                  "path": ["auth", "facebook", "callback"]
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "facebook",
+                    "callback"
+                  ]
                 },
                 "description": "Callback endpoint for Facebook OAuth. Handles both registration and login. Returns access token and user info. Sets refreshToken cookie."
               },
               "response": []
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "Admin Auth",
+      "item": [
+        {
+          "name": "Seed Admin (Temporary)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/admin/auth/seed",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "auth",
+                "seed"
+              ]
+            },
+            "description": "Temporary endpoint to seed the initial admin user with credentials: gospyjo@gmail.com / 12@Jkmdaj"
+          },
+          "response": []
+        },
+        {
+          "name": "Login Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticate an admin user. Returns an admin access token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin Settings",
+      "item": [
+        {
+          "name": "Get Admin Settings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin-settings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin-settings"
+              ]
+            },
+            "description": "Get system-wide admin settings. Requires admin authentication."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Admin Settings",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"siteName\": \"HyFuture\",\n  \"maintenanceMode\": false,\n  \"contactEmail\": \"admin@hyfuture.app\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin-settings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin-settings"
+              ]
+            },
+            "description": "Update system-wide admin settings. Requires admin authentication."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Letters (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/letters/admin/all?status=SCHEDULED",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "letters",
+                "admin",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "SCHEDULED"
+                }
+              ]
+            },
+            "description": "Admin route to fetch all letters in the database, categorized by status (DELIVERED, SCHEDULED, etc.)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Letter Stats (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/letters/admin/stats",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "letters",
+                "admin",
+                "stats"
+              ]
+            },
+            "description": "Admin route to get counts of letters categorized by status (DELIVERED, SCHEDULED, DRAFT, FAILED)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/admin/all",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "admin",
+                "all"
+              ]
+            },
+            "description": "Admin route to fetch all registered users in the database."
+          },
+          "response": []
+        },
+        {
+          "name": "Migrate Encryption",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/letters/admin/migrate-encryption",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "letters",
+                "admin",
+                "migrate-encryption"
+              ]
+            },
+            "description": "Admin route to encrypt all existing plain-text letters and attachments in the database."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Waitlist (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/waitlist/admin/all",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "waitlist",
+                "admin",
+                "all"
+              ]
+            },
+            "description": "Admin route to fetch all entries in the waitlist."
+          },
+          "response": []
         }
       ]
     },
@@ -684,6 +1214,11 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}",
+                "type": "text"
               }
             ],
             "body": {
@@ -692,8 +1227,12 @@
             },
             "url": {
               "raw": "{{baseUrl}}/broadcast-email",
-              "host": ["{{baseUrl}}"],
-              "path": ["broadcast-email"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "broadcast-email"
+              ]
             },
             "description": "Schedule a broadcast email to waitlist users or all verified users. Emails are personalized with recipient names. Optional action button can be included. If actionButton is not provided, no button will be displayed. Supports optional scheduled delivery."
           },
@@ -703,11 +1242,23 @@
           "name": "Get Job Status",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}",
+                "type": "text"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/broadcast-email/job/{{jobId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["broadcast-email", "job", "{{jobId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "broadcast-email",
+                "job",
+                "{{jobId}}"
+              ]
             },
             "description": "Get the status of a broadcast email job by job ID. Returns job state, timestamps, and failure reason if applicable."
           },
@@ -717,11 +1268,23 @@
           "name": "Get Queue Stats",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}",
+                "type": "text"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/broadcast-email/queue/stats",
-              "host": ["{{baseUrl}}"],
-              "path": ["broadcast-email", "queue", "stats"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "broadcast-email",
+                "queue",
+                "stats"
+              ]
             },
             "description": "Get statistics about the broadcast email queue including waiting, active, completed, failed, and delayed job counts."
           },
@@ -774,6 +1337,18 @@
     {
       "key": "jobId",
       "value": "replace-with-job-id"
+    },
+    {
+      "key": "adminEmail",
+      "value": "gospyjo@gmail.com"
+    },
+    {
+      "key": "adminPassword",
+      "value": "12@Jkmdaj"
+    },
+    {
+      "key": "adminAccessToken",
+      "value": "replace-with-admin-access-token"
     }
   ]
 }

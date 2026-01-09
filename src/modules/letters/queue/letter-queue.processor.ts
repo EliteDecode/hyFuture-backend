@@ -5,6 +5,7 @@ import { DatabaseService } from 'src/shared/database/database.service';
 import { MyLoggerService } from 'src/shared/my-logger/my-logger.service';
 import { EmailService } from 'src/shared/email/email.service';
 import { LetterStatus } from '@prisma/client';
+import { decrypt } from 'src/common/utils/encryption.util';
 
 export interface LetterDeliveryJobData {
     letterId: string;
@@ -65,19 +66,46 @@ export class LetterQueueProcessor extends WorkerHost {
 
             // Send the email
             this.logger.log(`Sending email for letter: ${letterId}`);
+
+            // Decrypt subject, content and attachments for email
+            let decryptedSubject = letter.subject || '';
+            try {
+                decryptedSubject = decrypt(decryptedSubject);
+            } catch (e) {
+                // Fallback for plain text
+            }
+
+            let decryptedContent = letter.content || '';
+            try {
+                decryptedContent = decrypt(decryptedContent);
+            } catch (e) {
+                // Fallback for plain text
+            }
+
+            const decryptedAttachments = letter.attachments.map((att) => {
+                try {
+                    return {
+                        fileUrl: decrypt(att.fileUrl),
+                        type: att.type,
+                    };
+                } catch (e) {
+                    return {
+                        fileUrl: att.fileUrl,
+                        type: att.type,
+                    };
+                }
+            });
+
             await this.emailService.sendLetterDelivery({
                 email: letter.recipientEmail,
                 senderEmail: letter.senderEmail || '',
                 recipientEmail: letter.recipientEmail,
                 senderName: letter.senderName || undefined,
                 recipientName: letter.recipientName || undefined,
-                subject: letter.subject || undefined,
-                content: letter.content || undefined,
+                subject: decryptedSubject || undefined,
+                content: decryptedContent,
                 deliveryDate: deliveryDateFormatted,
-                attachments: letter.attachments.map((att) => ({
-                    fileUrl: att.fileUrl,
-                    type: att.type,
-                })),
+                attachments: decryptedAttachments,
             });
 
             // Update letter status to delivered

@@ -64,15 +64,32 @@ export class BroadcastEmailService {
 
   private async getRecipientCount(type: BroadcastEmailType): Promise<number> {
     if (type === BroadcastEmailType.WAITLIST) {
-      return this.databaseService.waitlist.count();
-    } else if (type === BroadcastEmailType.GENERAL) {
-      return this.databaseService.user.count({
-        where: {
-          isEmailVerified: true,
-        },
+      // Target only waitlist members who haven't signed up yet
+      const waitlistEmails = await this.databaseService.waitlist.findMany({
+        select: { email: true },
       });
+      const userEmails = await this.databaseService.user.findMany({
+        where: { isEmailVerified: true },
+        select: { email: true },
+      });
+      const userEmailSet = new Set(userEmails.map((u) => u.email));
+      return waitlistEmails.filter((w) => !userEmailSet.has(w.email)).length;
+    } else if (type === BroadcastEmailType.GENERAL) {
+      // General - unique emails from both waitlist and verified users
+      const waitlistEmails = await this.databaseService.waitlist.findMany({
+        select: { email: true },
+      });
+      const userEmails = await this.databaseService.user.findMany({
+        where: { isEmailVerified: true },
+        select: { email: true },
+      });
+      const allEmails = new Set([
+        ...waitlistEmails.map((w) => w.email),
+        ...userEmails.map((u) => u.email),
+      ]);
+      return allEmails.size;
     } else {
-      return testEmails.length
+      return testEmails.length;
     }
   }
 }

@@ -16,7 +16,7 @@ export class WaitlistService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly emailService: EmailService,
-  ) {}
+  ) { }
 
   async create(createWaitlistDto: CreateWaitlistDto) {
     // Sanitize email input
@@ -74,5 +74,13 @@ export class WaitlistService {
         name: waitlistEntry.name,
       },
     };
+  }
+
+  // Admin: Get all waitlist entries
+  async getAllWaitlist() {
+    this.logger.log('Admin: Fetching all waitlist entries');
+    return this.databaseService.waitlist.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
   }
 }

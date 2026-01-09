@@ -122,15 +122,35 @@ export class BroadcastEmailQueueProcessor extends WorkerHost {
         },
       });
 
-      return waitlistEntries.map((entry) => ({
-        email: entry.email,
-        name: entry.name,
-      }));
-    } else if (type === BroadcastEmailType.GENERAL) {
-      // GENERAL - fetch all users
       const users = await this.databaseService.user.findMany({
         where: {
-          isEmailVerified: true, // Only send to verified users
+          isEmailVerified: true,
+        },
+        select: {
+          email: true,
+        },
+      });
+
+      const userEmailSet = new Set(users.map((u) => u.email));
+
+      return waitlistEntries
+        .filter((entry) => !userEmailSet.has(entry.email))
+        .map((entry) => ({
+          email: entry.email,
+          name: entry.name,
+        }));
+    } else if (type === BroadcastEmailType.GENERAL) {
+      // GENERAL - fetch all users and waitlist, unique by email
+      const waitlistEntries = await this.databaseService.waitlist.findMany({
+        select: {
+          email: true,
+          name: true,
+        },
+      });
+
+      const users = await this.databaseService.user.findMany({
+        where: {
+          isEmailVerified: true,
         },
         select: {
           email: true,
@@ -138,10 +158,25 @@ export class BroadcastEmailQueueProcessor extends WorkerHost {
         },
       });
 
-      return users.map((user) => ({
-        email: user.email,
-        name: user.name || 'User', // Fallback to 'User' if name is null
-      }));
+      const recipientMap = new Map<string, { email: string; name: string }>();
+
+      // Add waitlist entries first
+      waitlistEntries.forEach((entry) => {
+        recipientMap.set(entry.email, {
+          email: entry.email,
+          name: entry.name,
+        });
+      });
+
+      // Add users, overwriting waitlist entries if they exist (prefer user name)
+      users.forEach((user) => {
+        recipientMap.set(user.email, {
+          email: user.email,
+          name: user.name || 'User',
+        });
+      });
+
+      return Array.from(recipientMap.values());
     } else if (type === BroadcastEmailType.PERSONAL) {
       return testEmails;
     }

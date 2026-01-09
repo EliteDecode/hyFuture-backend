@@ -3,10 +3,11 @@ import { WaitlistService } from './waitlist.service';
 import { WaitlistController } from './waitlist.controller';
 import { DatabaseModule } from 'src/shared/database/database.module';
 import { EmailModule } from 'src/shared/email/email.module';
+import { AdminAuthModule } from '../authentication/admin-auth/admin-auth.module';
 
 @Module({
   controllers: [WaitlistController],
   providers: [WaitlistService],
-  imports: [DatabaseModule, EmailModule],
+  imports: [DatabaseModule, EmailModule, AdminAuthModule],
 })
-export class WaitlistModule {}
+export class WaitlistModule { }

@@ -16,9 +16,9 @@ import { Throttle } from '@nestjs/throttler';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import type { ICurrentUser } from 'src/common/interfaces/current.user';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { AdminJwtAuthGuard } from 'src/common/guards/admin-jwt-auth.guard';
 import { LETTERS_CONSTANTS } from './constants/letters.constants';
 import { LetterStatus } from '@prisma/client';
-
 @Controller('letters')
 export class LettersController {
   constructor(private readonly lettersService: LettersService) { }
@@ -35,7 +35,7 @@ export class LettersController {
     const letter = await this.lettersService.createLetterFromDto(
       createLetterDto,
       undefined,
-      false,
+      true,
     );
     return letter;
   }
@@ -139,5 +139,25 @@ export class LettersController {
       id,
       user.sub,
     );
+  }
+
+  // Admin Routes
+  @UseGuards(AdminJwtAuthGuard)
+  @Get('admin/stats')
+  async getAdminStats() {
+    return this.lettersService.getAdminStats();
+  }
+
+  @UseGuards(AdminJwtAuthGuard)
+  @Get('admin/all')
+  async getAdminLetters(@Query('status') status?: string) {
+    const letterStatus = status as LetterStatus | undefined;
+    return this.lettersService.getAdminLetters(letterStatus);
+  }
+
+  @UseGuards(AdminJwtAuthGuard)
+  @Post('admin/migrate-encryption')
+  async migrateEncryption() {
+    return this.lettersService.encryptExistingLetters();
   }
 }

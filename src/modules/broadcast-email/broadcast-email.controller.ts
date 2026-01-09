@@ -1,12 +1,14 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { BroadcastEmailService } from './broadcast-email.service';
 import { CreateBroadcastEmailDto } from './dto/create-broadcast-email.dto';
+import { AdminJwtAuthGuard } from 'src/common/guards/admin-jwt-auth.guard';
 
 @Controller('broadcast-email')
+@UseGuards(AdminJwtAuthGuard)
 export class BroadcastEmailController {
   constructor(
     private readonly broadcastEmailService: BroadcastEmailService,
-  ) {}
+  ) { }
 
   @Post()
   async createBroadcastEmail(@Body() dto: CreateBroadcastEmailDto) {

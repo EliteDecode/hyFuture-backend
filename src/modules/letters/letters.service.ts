@@ -16,6 +16,7 @@ import { USERS_MESSAGES } from '../authentication/users/constants/users.constant
 import { LETTERS_MESSAGES } from './constants/letters.constants';
 
 import { LetterQueueService } from './queue/letter-queue.service';
+import { encrypt, decrypt } from 'src/common/utils/encryption.util';
 
 @Injectable()
 export class LettersService {
@@ -82,8 +83,8 @@ export class LettersService {
 
     // Use a loose-typed object to allow the new isPublic field before Prisma client is regenerated
     const letterDataAny: any = {
-      subject: dto.subject,
-      content: dto.content ?? '', // HTML content stored directly without transformation
+      subject: encrypt(dto.subject || ''), // Encrypt subject
+      content: encrypt(dto.content ?? ''), // Encrypt HTML content
       recipientEmail: dto.recipientEmail,
       recipientName: dto.recipientName,
       senderEmail: resolvedSenderEmail, // Set from authenticated user context later
@@ -125,7 +126,7 @@ export class LettersService {
         dto.attachments.length > 0 && {
         attachments: {
           create: dto.attachments.map((attachment) => ({
-            fileUrl: attachment.fileUrl,
+            fileUrl: encrypt(attachment.fileUrl), // Encrypt attachment URL
             type: attachment.type,
           })),
         },
@@ -278,10 +279,10 @@ export class LettersService {
           where: { id },
           data: {
             ...(updateDto.subject !== undefined && {
-              subject: updateDto.subject,
+              subject: encrypt(updateDto.subject),
             }),
             ...(updateDto.content !== undefined && {
-              content: updateDto.content,
+              content: encrypt(updateDto.content),
             }),
             ...(updateDto.recipientEmail !== undefined && {
               recipientEmail: updateDto.recipientEmail,
@@ -312,7 +313,7 @@ export class LettersService {
               updateDto.attachments.length > 0 && {
               attachments: {
                 create: updateDto.attachments.map((attachment) => ({
-                  fileUrl: attachment.fileUrl,
+                  fileUrl: encrypt(attachment.fileUrl),
                   type: attachment.type,
                 })),
               },
@@ -669,6 +670,33 @@ export class LettersService {
   private transformLetter(letter: any) {
     if (!letter) return null;
 
+    // Decrypt subject, content and attachments if available
+    if (letter.subject) {
+      try {
+        letter.subject = decrypt(letter.subject);
+      } catch (e) {
+        // Fallback for plain text
+      }
+    }
+
+    if (letter.content) {
+      try {
+        letter.content = decrypt(letter.content);
+      } catch (e) {
+        // Fallback for plain text
+      }
+    }
+
+    if (letter.attachments) {
+      letter.attachments = letter.attachments.map((att: any) => {
+        try {
+          return { ...att, fileUrl: decrypt(att.fileUrl) };
+        } catch (e) {
+          return att;
+        }
+      });
+    }
+
     // Drafts are always unlocked
     if (letter.status === LetterStatus.DRAFT) {
       return {
@@ -695,5 +723,79 @@ export class LettersService {
       ...letter,
       locked: false,
     };
+  }
+
+  // Admin: Get letter statistics
+  async getAdminStats() {
+    this.logger.log('Admin: Fetching letter statistics');
+    const stats = await this.databaseService.letter.groupBy({
+      by: ['status'],
+      _count: {
+        _all: true,
+      },
+    });
+
+    const result = {
+      DELIVERED: 0,
+      SCHEDULED: 0,
+      DRAFT: 0,
+      FAILED: 0,
+      TOTAL: 0,
+    };
+
+    stats.forEach((stat) => {
+      result[stat.status] = stat._count._all;
+      result.TOTAL += stat._count._all;
+    });
+
+    return result;
+  }
+
+  // Admin: Get all letters
+  async getAdminLetters(status?: LetterStatus) {
+    this.logger.log(`Admin: Fetching all letters, status: ${status || 'all'}`);
+    const where: Prisma.LetterWhereInput = status ? { status } : {};
+    const letters = await this.databaseService.letter.findMany({
+      where,
+      include: { attachments: true },
+      orderBy: { createdAt: 'desc' },
+    });
+    return letters.map((l) => this.transformLetter(l));
+  }
+
+  // Admin: Migrate existing letters to encrypted format
+  async encryptExistingLetters() {
+    this.logger.log('Admin: Starting encryption migration for existing letters');
+    const letters = await this.databaseService.letter.findMany({
+      include: { attachments: true },
+    });
+
+    let count = 0;
+    for (const letter of letters) {
+      const updatedData: any = {};
+      updatedData.content = encrypt(letter.content);
+      if (letter.subject) {
+        updatedData.subject = encrypt(letter.subject);
+      }
+
+      if (Object.keys(updatedData).length > 0) {
+        await this.databaseService.letter.update({
+          where: { id: letter.id },
+          data: updatedData,
+        });
+      }
+
+      for (const att of letter.attachments) {
+        if (!att.fileUrl.includes(':')) {
+          await this.databaseService.attachment.update({
+            where: { id: att.id },
+            data: { fileUrl: encrypt(att.fileUrl) },
+          });
+        }
+      }
+      count++;
+    }
+
+    return { message: `Successfully processed ${count} letters` };
   }
 }

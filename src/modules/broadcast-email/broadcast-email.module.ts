@@ -7,6 +7,7 @@ import { BroadcastEmailQueueProcessor } from './queue/broadcast-email-queue.proc
 import { DatabaseModule } from 'src/shared/database/database.module';
 import { EmailModule } from 'src/shared/email/email.module';
 import { MyLoggerModule } from 'src/shared/my-logger/my-logger.module';
+import { AdminAuthModule } from '../authentication/admin-auth/admin-auth.module';
 
 @Module({
   controllers: [BroadcastEmailController],
@@ -19,10 +20,10 @@ import { MyLoggerModule } from 'src/shared/my-logger/my-logger.module';
     DatabaseModule,
     EmailModule,
     MyLoggerModule,
+    AdminAuthModule,
     BullModule.registerQueue({
       name: 'broadcast-email',
     }),
   ],
 })
-export class BroadcastEmailModule {}
-
+export class BroadcastEmailModule { }

@@ -173,4 +173,15 @@ export class UsersService {
 
     return { message: USERS_MESSAGES.ACCOUNT_DELETED };
   }
+
+  // Admin: Get all users
+  async getAllUsers() {
+    this.logger.log('Admin: Fetching all users');
+    return this.databaseService.user.findMany({
+      orderBy: { createdAt: 'desc' },
+      omit: {
+        password: true,
+      },
+    });
+  }
 }
