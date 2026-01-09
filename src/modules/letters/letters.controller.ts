@@ -35,7 +35,7 @@ export class LettersController {
     const letter = await this.lettersService.createLetterFromDto(
       createLetterDto,
       undefined,
-      true,
+      false,
     );
     return letter;
   }
