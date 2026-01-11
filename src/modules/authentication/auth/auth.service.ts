@@ -26,7 +26,7 @@ export class AuthService {
     private readonly registrationService: AuthRegistrationService,
     private readonly passwordService: AuthPasswordService,
     private readonly emailService: EmailService,
-  ) {}
+  ) { }
 
   // Registration methods - delegated to AuthRegistrationService
   async register(registerDto: RegisterUserDto) {
@@ -109,7 +109,11 @@ export class AuthService {
 
     if (!user.isEmailVerified) {
       this.logger.warn(`Login attempt by unverified user: ${user.id}`);
-      throw new UnauthorizedException(AUTH_MESSAGES.USER_NOT_VERIFIED);
+      throw new UnauthorizedException({
+        message: AUTH_MESSAGES.USER_NOT_VERIFIED,
+        email: user.email,
+        userId: user.id,
+      });
     }
 
     const tokens = await this.tokensService.generateToken({

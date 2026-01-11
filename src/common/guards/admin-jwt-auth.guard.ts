@@ -14,7 +14,6 @@ export class AdminJwtAuthGuard implements CanActivate {
         private jwtService: JwtService,
         private databaseService: DatabaseService,
     ) { }
-
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest<Request>();
         const token = this.extractTokenFromHeader(request);

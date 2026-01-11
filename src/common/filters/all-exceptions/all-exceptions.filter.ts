@@ -12,7 +12,7 @@ import { MyLoggerService } from 'src/shared/my-logger/my-logger.service';
 type MyResponseObj = {
   success: boolean;
   message: string;
-  data: null;
+  data: any;
   statusCode: number;
   timestamp: string;
   path: string;
@@ -30,6 +30,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
     let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
     let message = 'Internal Server Error';
     let errorResponse: any = null;
+    let data: any = null;
 
     if (exception instanceof HttpException) {
       statusCode = exception.getStatus();
@@ -45,6 +46,17 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
         message =
           responseObj.message || exception.message || 'An error occurred';
         errorResponse = responseObj;
+
+        // Extract extra data (excluding standard NestJS error fields)
+        const {
+          message: _,
+          statusCode: __,
+          error: ___,
+          ...extraData
+        } = responseObj;
+        if (Object.keys(extraData).length > 0) {
+          data = extraData;
+        }
       } else {
         message = exception.message || 'An error occurred';
       }
@@ -53,7 +65,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
     const myResponseObj: MyResponseObj = {
       success: false,
       message,
-      data: null,
+      data,
       statusCode,
       timestamp: new Date().toISOString(),
       path: request.url,

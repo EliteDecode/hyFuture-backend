@@ -16,7 +16,7 @@ import { USERS_MESSAGES } from '../authentication/users/constants/users.constant
 import { LETTERS_MESSAGES } from './constants/letters.constants';
 
 import { LetterQueueService } from './queue/letter-queue.service';
-import { encrypt, decrypt } from 'src/common/utils/encryption.util';
+import { encrypt, fullyDecrypt } from 'src/common/utils/encryption.util';
 
 @Injectable()
 export class LettersService {
@@ -667,34 +667,32 @@ export class LettersService {
   }
 
   // Helper to transform letter based on locking logic
-  private transformLetter(letter: any) {
+  private transformLetter(letter: any, isAdmin: boolean = false) {
     if (!letter) return null;
 
     // Decrypt subject, content and attachments if available
+    // Using fullyDecrypt to handle any number of encryption layers safely
     if (letter.subject) {
-      try {
-        letter.subject = decrypt(letter.subject);
-      } catch (e) {
-        // Fallback for plain text
-      }
+      letter.subject = fullyDecrypt(letter.subject);
     }
 
     if (letter.content) {
-      try {
-        letter.content = decrypt(letter.content);
-      } catch (e) {
-        // Fallback for plain text
-      }
+      letter.content = fullyDecrypt(letter.content);
     }
 
     if (letter.attachments) {
-      letter.attachments = letter.attachments.map((att: any) => {
-        try {
-          return { ...att, fileUrl: decrypt(att.fileUrl) };
-        } catch (e) {
-          return att;
-        }
-      });
+      letter.attachments = letter.attachments.map((att: any) => ({
+        ...att,
+        fileUrl: fullyDecrypt(att.fileUrl),
+      }));
+    }
+
+    // Admins can see everything
+    if (isAdmin) {
+      return {
+        ...letter,
+        locked: false,
+      };
     }
 
     // Drafts are always unlocked
@@ -757,25 +755,44 @@ export class LettersService {
     const where: Prisma.LetterWhereInput = status ? { status } : {};
     const letters = await this.databaseService.letter.findMany({
       where,
-      include: { attachments: true },
+      select: {
+        id: true,
+        deliveryDate: true,
+        deliveredAt: true,
+        status: true,
+        isGuest: true,
+        isPublic: true,
+        createdAt: true,
+        updatedAt: true,
+      },
       orderBy: { createdAt: 'desc' },
     });
-    return letters.map((l) => this.transformLetter(l));
+    return letters;
   }
 
-  // Admin: Migrate existing letters to encrypted format
-  async encryptExistingLetters() {
-    this.logger.log('Admin: Starting encryption migration for existing letters');
+
+  // Admin: Fix multi-layer encryption by fully decrypting and then encrypting once
+  async fixDoubleEncryption() {
+    this.logger.log('Admin: Starting multi-layer encryption fix migration');
     const letters = await this.databaseService.letter.findMany({
       include: { attachments: true },
     });
+    let letterCount = 0;
+    let attachmentCount = 0;
 
-    let count = 0;
     for (const letter of letters) {
       const updatedData: any = {};
-      updatedData.content = encrypt(letter.content);
+
+      // Handle content
+      if (letter.content) {
+        const decrypted = fullyDecrypt(letter.content);
+        updatedData.content = encrypt(decrypted);
+      }
+
+      // Handle subject
       if (letter.subject) {
-        updatedData.subject = encrypt(letter.subject);
+        const decrypted = fullyDecrypt(letter.subject);
+        updatedData.subject = encrypt(decrypted);
       }
 
       if (Object.keys(updatedData).length > 0) {
@@ -783,19 +800,24 @@ export class LettersService {
           where: { id: letter.id },
           data: updatedData,
         });
+        letterCount++;
       }
 
+      // Handle attachments
       for (const att of letter.attachments) {
-        if (!att.fileUrl.includes(':')) {
+        if (att.fileUrl) {
+          const decrypted = fullyDecrypt(att.fileUrl);
           await this.databaseService.attachment.update({
             where: { id: att.id },
-            data: { fileUrl: encrypt(att.fileUrl) },
+            data: { fileUrl: encrypt(decrypted) },
           });
+          attachmentCount++;
         }
       }
-      count++;
     }
 
-    return { message: `Successfully processed ${count} letters` };
+    return {
+      message: `Successfully processed ${letterCount} letters and ${attachmentCount} attachments`,
+    };
   }
 }

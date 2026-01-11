@@ -34,7 +34,6 @@ async function bootstrap() {
   });
 
   app.setGlobalPrefix('api/v1');
-
   // Get Express instance
   const expressApp = app.getHttpAdapter().getInstance();
 
@@ -42,7 +41,6 @@ async function bootstrap() {
   expressApp.get('/', (req, res) => {
     res.send(getLandingPage());
   });
-
   // Swagger UI
   try {
     const swaggerFilePath = join(process.cwd(), 'openapi', 'openapi.json');

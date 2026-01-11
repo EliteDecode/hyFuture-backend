@@ -11,8 +11,7 @@ import { API_MESSAGES_REGISTRY } from '../constants/api-messages.registry';
 
 @Injectable()
 export class TransformInterceptor<T>
-  implements NestInterceptor<T, ApiResponse<T> | T>
-{
+  implements NestInterceptor<T, ApiResponse<T> | T> {
   intercept(
     context: ExecutionContext,
     next: CallHandler,
@@ -26,12 +25,24 @@ export class TransformInterceptor<T>
     // }
 
     return next.handle().pipe(
-      map((data) => ({
-        success: true,
-        message: this.getMessage(context, statusCode),
-        data,
-        statusCode,
-      })),
+      map((data) => {
+        let message = this.getMessage(context, statusCode);
+        let finalData = data;
+
+        // If data contains a message, use it and clean up data
+        if (data && typeof data === 'object' && 'message' in data) {
+          message = data.message;
+          const { message: _, ...rest } = data;
+          finalData = Object.keys(rest).length > 0 ? rest : null;
+        }
+
+        return {
+          success: true,
+          message,
+          data: finalData,
+          statusCode,
+        };
+      }),
     );
   }
 

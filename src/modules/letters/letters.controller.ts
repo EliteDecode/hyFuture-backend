@@ -156,8 +156,8 @@ export class LettersController {
   }
 
   @UseGuards(AdminJwtAuthGuard)
-  @Post('admin/migrate-encryption')
-  async migrateEncryption() {
-    return this.lettersService.encryptExistingLetters();
+  @Post('admin/fix-double-encryption')
+  async fixDoubleEncryption() {
+    return this.lettersService.fixDoubleEncryption();
   }
 }

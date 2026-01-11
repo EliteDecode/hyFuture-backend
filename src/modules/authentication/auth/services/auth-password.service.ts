@@ -43,7 +43,11 @@ export class AuthPasswordService {
     }
 
     if (!user.isEmailVerified) {
-      throw new UnauthorizedException(AUTH_MESSAGES.USER_NOT_VERIFIED);
+      throw new UnauthorizedException({
+        message: AUTH_MESSAGES.USER_NOT_VERIFIED,
+        email: user.email,
+        userId: user.id,
+      });
     }
 
     // Generate OTP code

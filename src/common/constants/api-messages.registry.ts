@@ -5,21 +5,21 @@ export const API_MESSAGES_REGISTRY: Record<string, string> = {
   // Auth Controller
   register: 'User registered successfully. Please verify your email.',
   login: 'Login successful',
-  verifyAuthCode:
-    'Email verified successfully. Your couple profile has been created.',
+  verifyAuthCode: 'Email verified successfully',
   checkInvitation: 'Invitation code is valid',
-  completeRegistration:
-    'Registration completed successfully. Welcome to Two Tone!',
+  completeRegistration: 'Registration completed successfully',
   renewTokens: 'Tokens renewed successfully',
   logout: 'Logged out successfully',
   resendInvitation: 'Invitation code has been resent successfully',
-  forgotPassword:
-    'Password reset code has been sent to your email. Please check your inbox.',
+  forgotPassword: 'Password reset code has been sent to your email',
   resetPassword: 'Password has been reset successfully',
+  resendVerificationCode: 'Verification code has been resent successfully',
+  resendPasswordCode: 'Password reset code has been resent successfully',
+
+  // Admin Auth Controller
+  seedAdmin: 'Admin account seeded successfully',
 
   // Users Controller
-  setWelcomeMessage: 'Welcome message updated successfully',
-  deleteAccount: 'Account deleted successfully',
 
   // Countries Controller
   findAll: 'Countries retrieved successfully',
@@ -34,10 +34,34 @@ export const API_MESSAGES_REGISTRY: Record<string, string> = {
   deleteLetter: 'Letter deleted successfully',
   createDraft: 'Draft saved successfully',
   updateDraft: 'Draft updated successfully',
+  getAllPublicLetters: 'Public letters retrieved successfully',
+  getPublicLetterById: 'Public letter retrieved successfully',
+  getAdminStats: 'Admin statistics retrieved successfully',
+  getAdminLetters: 'Admin letters retrieved successfully',
+  fixDoubleEncryption: 'Double encryption fixed successfully',
 
   // Notifications Controller
   getNotifications: 'Notifications retrieved successfully',
   getUnreadCount: 'Unread count retrieved successfully',
   markAsRead: 'Notification marked as read',
   markAllAsRead: 'All notifications marked as read',
+
+  // Profile Controller
+  getProfile: 'Profile retrieved successfully',
+  updateProfile: 'Profile updated successfully',
+  changePassword: 'Password changed successfully',
+
+  // Waitlist Controller
+  create: 'Successfully joined the waitlist',
+  getAllWaitlist: 'Waitlist entries retrieved successfully',
+
+  // Broadcast Email Controller
+  createBroadcastEmail: 'Broadcast email job created successfully',
+  getJobStatus: 'Broadcast job status retrieved successfully',
+  getQueueStats: 'Queue statistics retrieved successfully',
+
+  // Users Controller
+  setWelcomeMessage: 'Welcome message updated successfully',
+  deleteAccount: 'Account deleted successfully',
+  getAllUsers: 'Users retrieved successfully',
 };
