@@ -80,52 +80,47 @@ export const getLetterDeliveryTemplate = ({
         </div>
 
         <!-- From Display -->
-        ${
-          !isLetterToSelf
-            ? `
+        ${!isLetterToSelf
+      ? `
         <p style="margin: 0; color: #1F2937; font-size: 18px; line-height: 1.5; margin-top: 40px">
           Sent to you by: <strong>${fromDisplay}</strong>
         </p>
         `
-            : ''
-        }
+      : ''
+    }
       </div>
 
       <!-- Subject (if exists) -->
-      ${
-        subject
-          ? `
+      ${subject
+      ? `
       <div style="padding: 0 24px 16px 24px;">
         <h2 style="margin: 0; color: #1F2937; font-size: 20px; font-weight: 600; line-height: 1.4;">
           ${subject}
         </h2>
       </div>
       `
-          : ''
-      }
+      : ''
+    }
 
       <!-- Main Content Card -->
       <div style="padding: 0 24px 24px 24px;">
         <div>
-          ${
-            content
-              ? `
+          ${content
+      ? `
           <div style="color: #374151; font-size: 16px; line-height: 1.7;  word-wrap: break-word;">
             ${content}
           </div>
           `
-              : ''
-          }
+      : ''
+    }
 
-          ${
-            hasAnyAttachments
-              ? `
+          ${hasAnyAttachments
+      ? `
           <div style="margin-top: ${content ? '24px' : '0'}; padding-top: ${content ? '24px' : '0'}; border-top: ${content ? '1px solid #E5E7EB' : 'none'};">
-            ${
-              imageAttachments.length > 0
-                ? imageAttachments
-                    .map(
-                      (att, index) => `
+            ${imageAttachments.length > 0
+        ? imageAttachments
+          .map(
+            (att, index) => `
             <div style="margin-bottom: 20px;">
               <img src="${att.fileUrl}" alt="Image ${index + 1}" style="max-width: 100%; height: auto; border-radius: 6px; display: block;" />
               <p style="margin: 8px 0 0 0; color: #6B7280; font-size: 12px;">
@@ -133,15 +128,14 @@ export const getLetterDeliveryTemplate = ({
               </p>
             </div>
             `,
-                    )
-                    .join('')
-                : ''
-            }
-            ${
-              videoAttachments.length > 0
-                ? videoAttachments
-                    .map(
-                      (att, index) => `
+          )
+          .join('')
+        : ''
+      }
+            ${videoAttachments.length > 0
+        ? videoAttachments
+          .map(
+            (att, index) => `
             <div style="margin-bottom: 20px;">
               <video controls style="width: 100%; max-width: 100%; height: auto; border-radius: 6px; background-color: #F3F4F6;">
                 <source src="${att.fileUrl}" type="video/mp4">
@@ -156,15 +150,14 @@ export const getLetterDeliveryTemplate = ({
               </p>
             </div>
             `,
-                    )
-                    .join('')
-                : ''
-            }
-            ${
-              audioAttachments.length > 0
-                ? audioAttachments
-                    .map(
-                      (att, index) => `
+          )
+          .join('')
+        : ''
+      }
+            ${audioAttachments.length > 0
+        ? audioAttachments
+          .map(
+            (att, index) => `
             <div style="margin-bottom: 20px; background-color: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 6px; padding: 16px;">
               <p style="margin: 0 0 12px 0; color: #374151; font-size: 13px; font-weight: 500;">
                 🎵 Audio ${index + 1}
@@ -186,36 +179,35 @@ export const getLetterDeliveryTemplate = ({
               </p>
             </div>
             `,
-                    )
-                    .join('')
-                : ''
-            }
-            ${
-              documentAttachments.length > 0
-                ? `
+          )
+          .join('')
+        : ''
+      }
+            ${documentAttachments.length > 0
+        ? `
             <div style="margin-top: ${imageAttachments.length > 0 || videoAttachments.length > 0 || audioAttachments.length > 0 ? '20px' : '0'}; padding-top: ${imageAttachments.length > 0 || videoAttachments.length > 0 || audioAttachments.length > 0 ? '20px' : '0'}; border-top: ${imageAttachments.length > 0 || videoAttachments.length > 0 || audioAttachments.length > 0 ? '1px solid #E5E7EB' : 'none'};">
               <p style="margin: 0 0 12px 0; color: #374151; font-size: 13px; font-weight: 500;">
                 Documents
               </p>
               ${documentAttachments
-                .map(
-                  (att, index) => `
+          .map(
+            (att, index) => `
               <div style="margin-bottom: 12px;">
                 <a href="${att.fileUrl}" style="display: inline-block; padding: 10px 16px; background-color: #FFFFFF; border: 1px solid #E5E7EB; border-radius: 6px; color: #2563EB; text-decoration: none; font-size: 14px;">
                   📄 Document ${index + 1} - Download
                 </a>
               </div>
               `,
-                )
-                .join('')}
+          )
+          .join('')}
             </div>
             `
-                : ''
-            }
+        : ''
+      }
           </div>
           `
-              : ''
-          }
+      : ''
+    }
         </div>
       </div>
 

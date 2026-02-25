@@ -1,0 +1,17 @@
+model BroadcastSchedule {
+    id           String    @id @default(uuid())
+    type         String // "waitlist", "general", "personal", "test"
+    subject      String
+    message      String    @db.Text
+    cron         String? // cron expression for recurrence
+    isRecurring  Boolean   @default(false)
+    frequency    String? // "weekly", "biweekly", "monthly"
+    lastRunAt    DateTime?
+    nextRunAt    DateTime?
+    isActive     Boolean   @default(true)
+    actionButton Json? // structure: { introText, buttonText, url }
+    createdAt    DateTime  @default(now())
+    updatedAt    DateTime  @updatedAt
+
+    @@map("broadcast_schedules")
+}

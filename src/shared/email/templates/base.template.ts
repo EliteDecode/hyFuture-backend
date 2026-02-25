@@ -44,17 +44,16 @@ export const getBaseTemplate = ({
         <div style="color: ${EMAIL_COLORS.TEXT_SECONDARY}; font-size: 16px; line-height: 1.6;">
           ${content}
         </div>
-        ${
-          buttonText && buttonLink
-            ? `
+        ${buttonText && buttonLink
+      ? `
         <div style="margin-top: 24px;">
           <a href="${buttonLink}" style="display: inline-block; padding: 10px 24px; background-color: ${EMAIL_COLORS.PRIMARY}; color: ${EMAIL_COLORS.WHITE}; text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 14px;">
             ${buttonText}
           </a>
         </div>
         `
-            : ''
-        }
+      : ''
+    }
       </div>
       <div style="padding: 16px 24px; border-top: 1px solid #E5E7EB; text-align: center;">
         <p style="margin: 0; color: #6B7280; font-size: 12px;">

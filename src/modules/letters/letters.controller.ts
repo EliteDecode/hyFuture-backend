@@ -12,6 +12,7 @@ import {
 import { LettersService } from './letters.service';
 import { CreateGuestLetterDto, CreateLetterDto } from './dto/create-letter.dto';
 import { UpdateLetterDto } from './dto/update-letter.dto';
+import { AdminRescheduleLetterDto } from './dto/admin-reschedule-letter.dto';
 import { Throttle } from '@nestjs/throttler';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
 import type { ICurrentUser } from 'src/common/interfaces/current.user';
@@ -159,5 +160,18 @@ export class LettersController {
   @Post('admin/fix-double-encryption')
   async fixDoubleEncryption() {
     return this.lettersService.fixDoubleEncryption();
+  }
+
+  @UseGuards(AdminJwtAuthGuard)
+  @Patch('admin/:id/reschedule')
+  async adminRescheduleLetter(
+    @Param('id') id: string,
+    @Body() rescheduleDto: AdminRescheduleLetterDto,
+  ) {
+    return this.lettersService.adminRescheduleLetter(
+      id,
+      rescheduleDto.deliveryDate,
+      rescheduleDto.isPublic,
+    );
   }
 }

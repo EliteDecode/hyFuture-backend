@@ -17,6 +17,8 @@ export interface BroadcastEmailJobData {
     buttonText: string;
     url: string;
   };
+  isRecurring?: boolean;
+  scheduleId?: string;
 }
 
 @Processor('broadcast-email')
@@ -33,7 +35,36 @@ export class BroadcastEmailQueueProcessor extends WorkerHost {
   }
 
   async process(job: Job<BroadcastEmailJobData>): Promise<void> {
-    const { type, subject, message, actionButton, deliveryDate } = job.data;
+    const { type, subject, message, actionButton, deliveryDate, isRecurring, scheduleId } = job.data;
+
+    if (isRecurring && scheduleId) {
+      const schedule = await this.databaseService.broadcastSchedule.findUnique({
+        where: { id: scheduleId },
+      });
+
+      if (!schedule || !schedule.isActive) {
+        this.logger.log(`Schedule ${scheduleId} is inactive or deleted. Skipping.`);
+        return;
+      }
+
+      // Frequency-based skip logic (specifically for bi-weekly)
+      if (schedule.frequency === 'biweekly' && schedule.lastRunAt) {
+        const thirteenDaysInMs = 13 * 24 * 60 * 60 * 1000;
+        const msSinceLastRun = Date.now() - schedule.lastRunAt.getTime();
+        if (msSinceLastRun < thirteenDaysInMs) {
+          this.logger.log(
+            `Skipping recurring broadcast ${scheduleId} for this week (bi-weekly rule)`,
+          );
+          return;
+        }
+      }
+
+      // Update lastRunAt
+      await this.databaseService.broadcastSchedule.update({
+        where: { id: scheduleId },
+        data: { lastRunAt: new Date() },
+      });
+    }
 
     // Determine the date to display: use deliveryDate if provided, otherwise use current date
     const displayDate = deliveryDate ? new Date(deliveryDate) : new Date();
@@ -179,6 +210,8 @@ export class BroadcastEmailQueueProcessor extends WorkerHost {
       return Array.from(recipientMap.values());
     } else if (type === BroadcastEmailType.PERSONAL) {
       return testEmails;
+    } else if (type === BroadcastEmailType.TEST) {
+      return [{ name: 'Gospel Jonathan', email: 'gospyjo@gmail.com' }];
     }
 
     // Default case - should never happen, but TypeScript requires it

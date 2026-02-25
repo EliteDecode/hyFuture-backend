@@ -11,7 +11,7 @@ export class BroadcastEmailQueueService {
     @InjectQueue('broadcast-email')
     private readonly broadcastEmailQueue: Queue<BroadcastEmailJobData>,
     private readonly logger: MyLoggerService,
-  ) {}
+  ) { }
 
   async scheduleBroadcastEmail(
     type: BroadcastEmailType,
@@ -74,6 +74,47 @@ export class BroadcastEmailQueueService {
       `Broadcast email scheduled successfully. Job ID: ${job.id}`,
     );
     return job.id || '';
+  }
+
+  async scheduleRecurringBroadcast(
+    id: string,
+    type: BroadcastEmailType,
+    subject: string,
+    message: string,
+    cron: string,
+    actionButton?: any,
+  ): Promise<void> {
+    this.logger.log(`Scheduling recurring broadcast email: id=${id}, cron=${cron}`);
+
+    await this.broadcastEmailQueue.add(
+      'send-broadcast-email',
+      {
+        type,
+        subject,
+        message,
+        actionButton,
+        isRecurring: true,
+        scheduleId: id
+      },
+      {
+        repeat: {
+          pattern: cron,
+        },
+        attempts: 3,
+        backoff: {
+          type: 'exponential',
+          delay: 5000,
+        },
+      },
+    );
+  }
+
+  async removeRepeatableJob(scheduleId: string, cron: string): Promise<void> {
+    this.logger.log(`Removing repeatable job for schedule: ${scheduleId}`);
+    // BullMQ requires the same repeat options to remove a repeatable job
+    await this.broadcastEmailQueue.removeRepeatable('send-broadcast-email', {
+      pattern: cron,
+    });
   }
 
   async getJobStatus(jobId: string): Promise<any> {

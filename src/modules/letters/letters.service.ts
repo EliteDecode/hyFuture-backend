@@ -771,6 +771,65 @@ export class LettersService {
   }
 
 
+  // Admin: Reschedule a letter (change delivery date, status, and public visibility)
+  async adminRescheduleLetter(
+    letterId: string,
+    newDeliveryDate: string,
+    isPublic?: boolean,
+  ) {
+    this.logger.log(`Admin: Rescheduling letter ${letterId} to ${newDeliveryDate}`);
+
+    // Find the letter
+    const letter = await this.databaseService.letter.findUnique({
+      where: { id: letterId },
+      include: { attachments: true },
+    });
+
+    if (!letter) {
+      throw new NotFoundException(LETTERS_MESSAGES.LETTER_NOT_FOUND);
+    }
+
+    // Parse and validate the new delivery date
+    const parsedDate = new Date(newDeliveryDate);
+    if (isNaN(parsedDate.getTime())) {
+      throw new BadRequestException(
+        'Invalid delivery date format. Please use ISO 8601 format (e.g., 2026-12-27T10:00:00Z)',
+      );
+    }
+
+    // Ensure new delivery date is in the future
+    const now = new Date();
+    if (parsedDate <= now) {
+      throw new BadRequestException(
+        'New delivery date must be in the future',
+      );
+    }
+
+    // Update the letter: reset status to SCHEDULED, clear deliveredAt, set new delivery date
+    const updatedLetter = await this.databaseService.letter.update({
+      where: { id: letterId },
+      data: {
+        deliveryDate: parsedDate,
+        status: LetterStatus.SCHEDULED,
+        deliveredAt: null,
+        ...(isPublic !== undefined && { isPublic }),
+      },
+      include: { attachments: true },
+    });
+
+    // Schedule the new delivery
+    await this.letterQueueService.scheduleLetterDelivery(
+      letterId,
+      parsedDate,
+    );
+
+    this.logger.log(
+      `Admin: Letter ${letterId} rescheduled successfully. New delivery date: ${parsedDate.toISOString()}, isPublic: ${updatedLetter.isPublic}`,
+    );
+
+    return this.transformLetter(updatedLetter, true);
+  }
+
   // Admin: Fix multi-layer encryption by fully decrypting and then encrypting once
   async fixDoubleEncryption() {
     this.logger.log('Admin: Starting multi-layer encryption fix migration');

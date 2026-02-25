@@ -48,20 +48,23 @@ export const getBroadcastEmailTemplate = ({
     <div style="max-width: 600px; width: 100%; margin: 0 auto; background-color: ${EMAIL_COLORS.WHITE}; overflow: hidden;">
       
       <!-- Header -->
-      <div style="padding: 24px 24px 16px 24px;">
-        <div style="margin-bottom: 16px;">
-          <div style="display: inline-block; width: 60%; vertical-align: top;">
-            <p style="margin: 0 0 4px 0; color: #2563EB; font-size: 18px; font-weight: 600;">
-              ${subject}
-            </p>
-            <p style="margin: 0; color: #6B7280; font-size: 16px;">
-              ${formattedDate}
-            </p>
-          </div>
-          <div style="display: inline-block; width: 35%; text-align: right; vertical-align: top;">
-            <img src="${FUTURE_ME_LOGO_URL}" alt="HyFuture logo" style="max-width: 110px; height: auto; object-fit: contain;" />
-          </div>
-        </div>
+      <div style="padding: 36px 24px 28px 24px; background-color: ${EMAIL_COLORS.WHITE};">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td style="vertical-align: top;">
+              <h1 style="margin: 0; color: #111827; font-size: 21px; font-weight: 700; font-family: ${EMAIL_FONTS.FONT_FAMILY}; line-height: 1.2;">
+                A special message <br />
+                <span style="color: ${EMAIL_COLORS.PRIMARY};">for you</span>
+              </h1>
+              <p style="margin: 6px 0 0 0; color: #94A3B8; font-size: 13px; font-weight: 500; font-family: ${EMAIL_FONTS.FONT_FAMILY};">
+                ${formattedDate} 
+              </p>
+            </td>
+            <td style="text-align: right; vertical-align: top;">
+              <img src="${FUTURE_ME_LOGO_URL}" alt="HyFuture" style="max-width: 115px; height: auto;" />
+            </td>
+          </tr>
+        </table>
       </div>
 
       <!-- Main Content Card -->
@@ -75,9 +78,8 @@ export const getBroadcastEmailTemplate = ({
           </div>
         </div>
         
-        ${
-          actionButton
-            ? `
+        ${actionButton
+      ? `
         <!-- Call to Action -->
         <div style="margin-top: 24px;">
           <div style="border: 1px solid #E2E8F0; border-radius: 8px; padding: 24px; text-align: center;">
@@ -90,8 +92,8 @@ export const getBroadcastEmailTemplate = ({
           </div>
         </div>
         `
-            : ''
-        }
+      : ''
+    }
       </div>
 
       <!-- Footer -->
