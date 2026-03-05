@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import sendMail from 'src/common/utils/email.utils';
+import sendMail, { getFirstName } from 'src/common/utils/email.utils';
 import {
   getVerificationCodeTemplate,
   getVerificationSuccessTemplate,
@@ -21,7 +21,7 @@ export class EmailService {
     props: VerificationCodeTemplateProps & { email: string },
   ): Promise<void> {
     const html = getVerificationCodeTemplate({
-      firstName: props.firstName,
+      firstName: getFirstName(props.firstName),
       verificationCode: props.verificationCode,
     });
 
@@ -36,7 +36,7 @@ export class EmailService {
     props: VerificationSuccessTemplateProps & { email: string },
   ): Promise<void> {
     const html = getVerificationSuccessTemplate({
-      firstName: props.firstName,
+      firstName: getFirstName(props.firstName),
       partnerName: props.partnerName,
     });
 
@@ -51,7 +51,7 @@ export class EmailService {
     props: PasswordResetTemplateProps & { email: string },
   ): Promise<void> {
     const html = getPasswordResetTemplate({
-      firstName: props.firstName,
+      firstName: getFirstName(props.firstName),
       resetCode: props.resetCode,
       resetLink: props.resetLink,
     });
@@ -67,7 +67,7 @@ export class EmailService {
     props: WaitlistConfirmationTemplateProps & { email: string },
   ): Promise<void> {
     const html = getWaitlistConfirmationTemplate({
-      name: props.name,
+      name: getFirstName(props.name),
       email: props.email,
     });
 
@@ -84,7 +84,7 @@ export class EmailService {
     const isLetterToSelf = props.senderEmail === props.recipientEmail;
 
     const html = getLetterDeliveryTemplate({
-      recipientName: props.recipientName,
+      recipientName: getFirstName(props.recipientName),
       senderName: props.senderName,
       senderEmail: props.senderEmail,
       recipientEmail: props.recipientEmail,
@@ -113,7 +113,7 @@ export class EmailService {
     props: BroadcastEmailTemplateProps & { email: string; subject: string },
   ): Promise<void> {
     const html = getBroadcastEmailTemplate({
-      name: props.name,
+      name: getFirstName(props.name),
       subject: props.subject,
       message: props.message,
       deliveryDate: props.deliveryDate,

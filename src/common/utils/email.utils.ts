@@ -62,4 +62,10 @@ const sendMail = async ({ to, subject, html }: MailOptions): Promise<void> => {
 //   });
 // };
 
+export const getFirstName = (name: string | null | undefined): string => {
+  if (!name) return 'User';
+  return name.trim().split(' ')[0];
+};
+
 export default sendMail;
+
